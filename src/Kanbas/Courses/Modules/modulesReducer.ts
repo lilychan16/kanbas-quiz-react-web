@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import db from "../../Database";
 
 const initialState = {
-  modules: db.modules,
+  modules: [] as { _id: string; name: string; description: string }[],
   module: {
     name: "New Module 123",
     description: "New Description",
@@ -18,59 +17,62 @@ const initialState = {
 };
 
 const modulesSlice = createSlice({
-    name: "modules",
-    initialState,
-    reducers: {
-        addModule: (state, action) => {
-            state.modules = [
-                { ...action.payload, _id: new Date().getTime().toString() },
-                ...state.modules,
-            ];
-            state.module = {
-              name: "New Module 123",
-              description: "New Description",
-              lessons: [
-                {
-                  _id: "0",
-                  name: "New Lesson",
-                  description: "New Lesson Description",
-                  module: "0",
-                },
-              ],
-            };
-        },
-        deleteModule: (state, action) => {
-            state.modules = state.modules.filter(
-                (module) => module._id !== action.payload
-            );
-        },
-        updateModule: (state, action) => {
-            state.modules = state.modules.map((module) => {
-                if (module._id === action.payload._id) {
-                    return action.payload;
-                } else {
-                    return module;
-                }
-            });
-            state.module = {
-              name: "New Module 123",
-              description: "New Description",
-              lessons: [
-                {
-                  _id: "0",
-                  name: "New Lesson",
-                  description: "New Lesson Description",
-                  module: "0",
-                },
-              ],
-            };
-        },
-        setModule: (state, action) => {
-            state.module = action.payload;
-        },
+  name: "modules",
+  initialState,
+  reducers: {
+    addModule: (state, action) => {
+      state.modules = [
+        { ...action.payload, _id: new Date().getTime().toString() },
+        ...state.modules,
+      ];
+      state.module = {
+        name: "New Module 123",
+        description: "New Description",
+        lessons: [
+          {
+            _id: "0",
+            name: "New Lesson",
+            description: "New Lesson Description",
+            module: "0",
+          },
+        ],
+      };
     },
+    deleteModule: (state, action) => {
+      state.modules = state.modules.filter(
+        (module) => module._id !== action.payload
+      );
+    },
+    updateModule: (state, action) => {
+      state.modules = state.modules.map((module) => {
+        if (module._id === action.payload._id) {
+          return action.payload;
+        } else {
+          return module;
+        }
+      });
+      state.module = {
+        name: "New Module 123",
+        description: "New Description",
+        lessons: [
+          {
+            _id: "0",
+            name: "New Lesson",
+            description: "New Lesson Description",
+            module: "0",
+          },
+        ],
+      };
+    },
+    setModule: (state, action) => {
+      state.module = action.payload;
+    },
+    setModules: (state, action) => {
+      state.modules = action.payload;
+    }
+  },
 });
 
 export const { addModule, deleteModule,
-                updateModule, setModule } = modulesSlice.actions;
+                updateModule, setModule, setModules } = modulesSlice.actions;
 export default modulesSlice.reducer;

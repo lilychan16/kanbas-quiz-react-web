@@ -10,6 +10,7 @@ import {
 } from "../assignmentsReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { KanbasState } from "../../../store";
+import * as client from "../client";
 
 function AssignmentEditor() {
     const { assignmentId } = useParams();
@@ -22,11 +23,18 @@ function AssignmentEditor() {
     const { courseId } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const handleSave = () => {
       if (assignmentId === "New") {
-        dispatch(addAssignment({ ...assignment, course: courseId }));
+        //dispatch(addAssignment({ ...assignment, course: courseId }));
+        client.createAssignment(courseId, assignment).then((assignment) => {
+          dispatch(addAssignment(assignment));
+        });
       } else {
-        dispatch(updateAssignment({ ...assignment, _id: assignmentId, course: courseId }));
+        //dispatch(updateAssignment({ ...assignment, _id: assignmentId, course: courseId }));
+        client.updateAssignment(assignment).then((status) => {
+          dispatch(updateAssignment(assignment));
+        });
       }
         navigate(`/Kanbas/Courses/${courseId}/Assignments`);
         console.log("New assignment created");

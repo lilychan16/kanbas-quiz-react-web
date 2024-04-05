@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import db from "../../Database";
 import { FaEllipsisV, FaCheckCircle, FaPlusCircle, FaPlus } from "react-icons/fa";
@@ -9,8 +9,10 @@ import {
   deleteModule,
   updateModule,
   setModule,
+  setModules
 } from "./modulesReducer";
 import { KanbasState } from "../../store";
+import * as client from "./client";
 
 function ModuleList() {
   const { courseId } = useParams();
@@ -24,6 +26,29 @@ function ModuleList() {
   );
   const dispatch = useDispatch();
   const [selectedModule, setSelectedModule] = useState(moduleList[0]);
+
+  const handleAddModule = () => {
+    client.createModule(courseId, module).then((module) => {
+      dispatch(addModule(module));
+    });
+  };
+  const handleDeleteModule = (moduleId: string) => {
+    client.deleteModule(moduleId).then((status) => {
+      dispatch(deleteModule(moduleId));
+    });
+  };
+  const handleUpdateModule = () => {
+    client.updateModule(module).then((status) => {
+      dispatch(updateModule(module));
+    })
+  };
+
+  useEffect(() => {
+    client.findModulesForCourse(courseId).then((modules) =>
+      dispatch(setModules(modules))
+    );
+  }, [courseId]);
+
   /*
   const [module, setModule] = useState({
     _id: "0",
@@ -95,14 +120,14 @@ function ModuleList() {
         <button
           className="btn btn-warning float-end"
           style={{ width: "10%" }}
-          onClick={() => dispatch(updateModule(module))}
+          onClick={handleUpdateModule}
         >
           Update
         </button>
         <button
           className="btn btn-primary float-end me-1"
           style={{ width: "10%" }}
-          onClick={() => dispatch(addModule({ ...module, course: courseId }))}
+          onClick={handleAddModule}
         >
           Add
         </button>
@@ -125,7 +150,7 @@ function ModuleList() {
                   <button
                     className="btn btn-danger mb-1"
                     style={{ height: "25px", fontSize: "14px" }}
-                    onClick={() => dispatch(deleteModule(module._id))}
+                    onClick={() => handleDeleteModule(module._id)}
                   >
                     Delete
                   </button>
@@ -141,7 +166,9 @@ function ModuleList() {
                   <FaEllipsisV className="ms-2" />
                 </span>
               </div>
-              {selectedModule._id === module._id && (
+              {/* Wherever you call the selectedModule variable, you have to add a ? to indicate to the component 
+              there's a possibility it might be undefined since modulesList is initialized as [] in the reducer. */}
+              {selectedModule?._id === module._id && (
                 <ul className="list-group">
                   {module.lessons?.map((lesson: any, index: number) => (
                     <li key={index} className="list-group-item">

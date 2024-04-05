@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import "./index.css";
 import { FaCheckCircle, FaEllipsisV, FaPlusCircle, FaPlus, FaClipboard } from "react-icons/fa";
@@ -9,9 +9,11 @@ import {
   deleteAssignment,
   updateAssignment,
   setAssignment,
+  setAssignments
 } from "./assignmentsReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { KanbasState } from "../../store";
+import * as client from "./client";
 
 function Assignments() {
   const { courseId } = useParams();
@@ -49,10 +51,18 @@ function Assignments() {
   };
 
   const handleDeleteConfirmation = () => {
-    dispatch(deleteAssignment(assignmentIdToDelete));
-    console.log(assignmentIdToDelete);
-    handleDialogClose();
+    client.deleteAssignment(assignmentIdToDelete).then((status) => {
+        dispatch(deleteAssignment(assignmentIdToDelete));
+        console.log(assignmentIdToDelete);
+        handleDialogClose();
+    });
   };
+
+  useEffect(() => {
+    client.findAssignmentsForCourse(courseId).then((assignments) =>
+      dispatch(setAssignments(assignments))
+    );
+  }, [courseId]);
 
   return (
     <div className="ms-3 col-lg-10">
