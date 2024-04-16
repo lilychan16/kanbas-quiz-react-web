@@ -18,6 +18,7 @@ import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import Grades from "./Grades";
 import axios from "axios";
+import * as client from "../client";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -29,11 +30,18 @@ function Courses() {
   const COURSES_API = `${API_BASE}/api/courses`;
 
   const [course, setCourse] = useState<any>({ _id: "" });
+  console.log(course);
 
+  /*
   const findCourseById = async (courseId?: string) => {
     const response = await axios.get(`${COURSES_API}/${courseId}`);
     setCourse(response.data);
   };
+  */
+ const findCourseById = async (courseId: any) => {
+    const course = await client.findCourseById(courseId);
+    setCourse(course);
+ };
 
   useEffect(() => {
     findCourseById(courseId);

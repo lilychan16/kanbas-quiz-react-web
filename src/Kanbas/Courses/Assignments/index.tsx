@@ -107,7 +107,7 @@ function Assignments() {
                     <FaEllipsisV className="me-2" />
                     <FaClipboard className="me-4" style={{ color: "green" }} />
                     <Link
-                      to={`/Kanbas/Courses/${courseId}/Assignments/${assignment._id}`}
+                      to={`/Kanbas/Courses/${courseId}/Assignments/${assignment.id}`}
                       className="assignment-setup"
                       onClick={() => dispatch(setAssignment(assignment))}
                     >

@@ -7,7 +7,7 @@ const initialState = {
     description: "New Description",
     lessons: [
       {
-        _id: "0",
+        id: "0",
         name: "New Lesson",
         description: "New Lesson Description",
         module: "0",
@@ -22,7 +22,7 @@ const modulesSlice = createSlice({
   reducers: {
     addModule: (state, action) => {
       state.modules = [
-        { ...action.payload, _id: new Date().getTime().toString() },
+        action.payload,
         ...state.modules,
       ];
       state.module = {
@@ -30,7 +30,7 @@ const modulesSlice = createSlice({
         description: "New Description",
         lessons: [
           {
-            _id: "0",
+            id: "0",
             name: "New Lesson",
             description: "New Lesson Description",
             module: "0",
@@ -56,7 +56,7 @@ const modulesSlice = createSlice({
         description: "New Description",
         lessons: [
           {
-            _id: "0",
+            id: "0",
             name: "New Lesson",
             description: "New Lesson Description",
             module: "0",
