@@ -1,27 +1,29 @@
 import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { useNavigate } from "react-router-dom";
 
 function Blanks() {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState();
   const [question, setQuestion] = useState("");
   const [blanks, setBlanks] = useState([{ answer: "" }]); // Each blank has one answer
+  const navigate = useNavigate();
 
-  const handleTitleChange = (event: any) => {
-    setQuestionTitle(event.target.value);
+  const handleTitleChange = (e: any) => {
+    setQuestionTitle(e.target.value);
   };
 
-  const handlePointsChange = (event: any) => {
-    setPoints(event.target.value);
+  const handlePointsChange = (e: any) => {
+    setPoints(e.target.value);
   };
 
-  const handleQuestionChange = (event: any) => {
-    setQuestion(event.target.value);
+  const handleQuestionChange = (e: any) => {
+    setQuestion(e.target.value);
   };
 
-  const handleAnswerChange = (index: number, event: any) => {
+  const handleAnswerChange = (index: number, e: any) => {
     const newBlanks = [...blanks];
-    newBlanks[index].answer = event.target.value;
+    newBlanks[index].answer = e.target.value;
     setBlanks(newBlanks);
   };
 
@@ -32,6 +34,25 @@ function Blanks() {
   const removeBlank = (index: number) => {
     const newBlanks = blanks.filter((_, i) => i !== index);
     setBlanks(newBlanks);
+  };
+
+  const handleTypeChange = (e: any) => {
+    let path;
+    switch (e.target.value) {
+      case "True/False":
+        path = "../TrueFalse";
+        break;
+      case "Fill In The Blanks":
+        path = "../Blanks";
+        break;
+      // case "Multiple Choice":
+      //   path = "../multiple-choice";
+      //   break;
+      default:
+        path = "/";
+        break;
+    }
+    navigate(path);
   };
 
   return (
@@ -45,10 +66,14 @@ function Blanks() {
           value={questionTitle}
           onChange={handleTitleChange}
         />
-        <select name="Question Type" id="Question Type">
+        <select
+          name="Question Type"
+          id="Question Type"
+          onChange={handleTypeChange}
+        >
+          <option value="Fill In The Blanks">Fill In The Blanks</option>
           <option value="Multiple Choice">Multiple Choice</option>
           <option value="True/False">True/False</option>
-          <option value="Fill In The Blanks">Fill In The Blanks</option>
         </select>
         <input
           className="float-end"

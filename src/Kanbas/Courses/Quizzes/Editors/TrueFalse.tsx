@@ -2,23 +2,45 @@ import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { RadioGroup, Radio } from "react-radio-group";
 import "./TrueFalse.css";
+import { useNavigate } from "react-router-dom";
 
 function TrueFalse() {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState();
   const [question, setQuestion] = useState("");
+  const navigate = useNavigate();
 
-  const handleTitleChange = (event: any) => {
-    setQuestionTitle(event.target.value);
+  const handleTitleChange = (e: any) => {
+    setQuestionTitle(e.target.value);
   };
 
-  const handlePointsChange = (event: any) => {
-    setPoints(event.target.value);
+  const handlePointsChange = (e: any) => {
+    setPoints(e.target.value);
   };
 
-  const handleQuestionChange = (event: any) => {
-    setQuestion(event.target.value);
+  const handleQuestionChange = (e: any) => {
+    setQuestion(e.target.value);
   };
+
+  const handleTypeChange = (e: any) => {
+    let path;
+    switch (e.target.value) {
+      case "True/False":
+        path = "../TrueFalse";
+        break;
+      case "Fill In The Blanks":
+        path = "../Blanks";
+        break;
+      // case "Multiple Choice":
+      //   path = "../multiple-choice";
+      //   break;
+      default:
+        path = "/";
+        break;
+    }
+    navigate(path);
+  };
+
   return (
     <div>
       <h1>TrueFalse</h1>
@@ -31,9 +53,13 @@ function TrueFalse() {
           value={questionTitle}
           onChange={handleTitleChange}
         />
-        <select name="Question Type" id="Question Type">
-          <option value="Multiple Choice">Multiple Choice</option>
+        <select
+          name="Question Type"
+          id="Question Type"
+          onChange={handleTypeChange}
+        >
           <option value="True/False">True/False</option>
+          <option value="Multiple Choice">Multiple Choice</option>
           <option value="Fill In The Blanks">Fill In The Blanks</option>
         </select>
         <input
