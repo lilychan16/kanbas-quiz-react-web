@@ -41,15 +41,13 @@ const quizzesSlice = createSlice({
             );
         },
         updateQuiz: (state, action) => {
+            console.log("Updating quiz with:", action.payload);
             state.quizzes = state.quizzes.map((quiz) => {
-                if (quiz._id === action.payload._id) {
-                    return action.payload;
-                } else {
-                    return quiz;
-                }
+                return quiz._id === action.payload._id ? action.payload : quiz;
             });
             state.quiz = action.payload;
         },
+        
         setQuiz: (state, action) => {
             state.quiz = action.payload;
         },

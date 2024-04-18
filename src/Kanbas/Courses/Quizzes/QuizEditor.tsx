@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { KanbasState } from "../../store";
-import { updateQuiz } from "../Quizzes/quizzesReducer";
+import { updateQuiz as updateQuizRedux } from "../Quizzes/quizzesReducer";
+import { updateQuiz as updateQuizAPI } from "./client";
 import { Editor } from "@tinymce/tinymce-react";
 
 function QuizDetail() {
-  const { quizId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
@@ -27,13 +27,19 @@ function QuizDetail() {
     }));
   };
 
-  const handleSave = () => {
-    dispatch(updateQuiz({ ...quizData }));
-    navigate("/quiz-details");
+  const handleSave = async () => {
+    try {
+      const updatedQuiz = await updateQuizAPI(quizData);
+      dispatch(updateQuizRedux({ ...quizData }));
+      // navigate back to quiz detail
+      navigate(`/Kanbas/Courses/${quiz.course}/Quizzes/${quiz.id}`);
+    } catch (error) {
+      console.error("Error updating quiz:", error);
+    }
   };
 
   const handleSaveAndPublish = () => {
-    dispatch(updateQuiz({ ...quizData, published: true }));
+    dispatch(updateQuizRedux({ ...quizData, published: true }));
     navigate("/quiz-list");
   };
 
