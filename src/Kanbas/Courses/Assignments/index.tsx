@@ -31,6 +31,14 @@ function Assignments() {
   );
 
   const newAssignmentPage = () => {
+    dispatch(
+      setAssignment({
+        title: "New Assignment",
+        start: "2024-01-01",
+        due: "2024-01-31",
+        points: "100",
+      })
+    );
     navigate(`/Kanbas/Courses/${courseId}/Assignments/New`);
     console.log("Navigate to new assignment page");
   };
