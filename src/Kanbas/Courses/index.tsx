@@ -21,6 +21,7 @@ import axios from "axios";
 import * as client from "../client";
 import Quizzes from "./Quizzes";
 import MultipleChoice from "./Quizzes/Editors/MultipleChoice";
+import QuizEditor from "./Quizzes/QuizEditor";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -97,6 +98,7 @@ function Courses() {
             <Route path="Grades" element={<Grades />} />
             <Route path="Quizzes" element={<Quizzes />}>
               <Route path="MultipleChoice" element={<MultipleChoice />} />
+              <Route path="EditDetails" element={<QuizEditor />} />
             </Route>
           </Routes>
         </div>
