@@ -48,13 +48,7 @@ const quizzesSlice = createSlice({
                     return quiz;
                 }
             });
-            state.quiz = {
-              title: "New Quiz",
-              due_date: "2024-01-31",
-              available_date: "2024-01-01",
-              until_date: "2024-01-31",
-              points: "100",
-            };
+            state.quiz = action.payload;
         },
         setQuiz: (state, action) => {
             state.quiz = action.payload;
