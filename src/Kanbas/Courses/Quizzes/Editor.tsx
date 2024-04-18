@@ -13,7 +13,7 @@ function Editor() {
 
   return (
     <div>
-      <h1>Quizzes</h1>
+      <h1>Edit Quiz</h1>
       <nav className="nav nav-tabs mt-2">
         <NavLink
           to="EditDetails"
