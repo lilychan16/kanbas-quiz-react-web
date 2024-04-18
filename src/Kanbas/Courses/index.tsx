@@ -19,6 +19,8 @@ import AssignmentEditor from "./Assignments/Editor";
 import Grades from "./Grades";
 import axios from "axios";
 import * as client from "../client";
+import Quizzes from "./Quizzes";
+import MultipleChoice from "./Quizzes/Editors/MultipleChoice";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -26,7 +28,7 @@ function Courses() {
   const { courseId } = useParams();
   const { pathname } = useLocation();
   const pathArray = pathname.split("/");
-  
+
   const COURSES_API = `${API_BASE}/api/courses`;
 
   const [course, setCourse] = useState<any>({ _id: "" });
@@ -38,10 +40,10 @@ function Courses() {
     setCourse(response.data);
   };
   */
- const findCourseById = async (courseId: any) => {
+  const findCourseById = async (courseId: any) => {
     const course = await client.findCourseById(courseId);
     setCourse(course);
- };
+  };
 
   useEffect(() => {
     findCourseById(courseId);
@@ -93,6 +95,9 @@ function Courses() {
               element={<AssignmentEditor />}
             />
             <Route path="Grades" element={<Grades />} />
+            <Route path="Quizzes" element={<Quizzes />}>
+              <Route path="MultipleChoice" element={<MultipleChoice />} />
+            </Route>
           </Routes>
         </div>
       </div>
