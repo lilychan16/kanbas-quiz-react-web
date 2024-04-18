@@ -17,6 +17,7 @@ import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import Grades from "./Grades";
+import Quizzes from "./Quizzes";
 import axios from "axios";
 import * as client from "../client";
 
@@ -93,6 +94,7 @@ function Courses() {
               element={<AssignmentEditor />}
             />
             <Route path="Grades" element={<Grades />} />
+            <Route path="Quizzes" element={<Quizzes />} />
           </Routes>
         </div>
       </div>
