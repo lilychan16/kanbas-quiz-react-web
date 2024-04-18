@@ -5,6 +5,7 @@ import QuizEditor from "./QuizEditor";
 import { useSelector } from "react-redux";
 import { KanbasState } from "../../store";
 import { FaCheckCircle, FaBan } from "react-icons/fa";
+import "./Editor.css";
 
 function Editor() {
   const quizData = useSelector(
