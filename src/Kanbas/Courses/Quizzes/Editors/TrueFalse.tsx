@@ -13,6 +13,7 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState();
   const [question, setQuestion] = useState("");
+  const [correctAnswer, setCorrectAnswer] = useState("");
   const navigate = useNavigate();
 
   const handleTitleChange = (e: any) => {
@@ -25,6 +26,10 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
 
   const handleQuestionChange = (e: any) => {
     setQuestion(e.target.value);
+  };
+
+  const handleCorrectAnswerChange = (e: any) => {
+    setCorrectAnswer(e.target.value);
   };
 
   const handleSave = () => {
@@ -76,7 +81,11 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
         <br />
         {/*Radio Buttons for the correct answer*/}
         <h5>The Correct Answer:</h5>
-        <RadioGroup name="CorrectAnswer" className="radio-button-group">
+        <RadioGroup
+          name="CorrectAnswer"
+          className="radio-button-group"
+          onChange={handleCorrectAnswerChange}
+        >
           <label>
             <Radio value="True" />
             True
