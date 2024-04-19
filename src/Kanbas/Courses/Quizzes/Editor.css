@@ -1,0 +1,7 @@
+.nav-link.active {
+  color: red !important; /* Use !important to override default Bootstrap styles */
+}
+
+.nav-link {
+  color: grey; /* Use !important to override default Bootstrap styles */
+}

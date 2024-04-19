@@ -17,6 +17,8 @@ export const deleteQuiz = async (quizId: any) => {
   return response.data;
 };
 export const updateQuiz = async (quiz: any) => {
+  console.log("Updating quiz at:", `${QUIZZES_API}/${quiz._id}`); // Debug URL
   const response = await axios.put(`${QUIZZES_API}/${quiz._id}`, quiz);
+  console.log("Update response:", response.data); // Debug response
   return response.data;
 };
