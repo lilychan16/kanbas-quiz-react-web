@@ -17,10 +17,9 @@ import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import Grades from "./Grades";
+import Quizzes from "./Quizzes";
 import axios from "axios";
 import * as client from "../client";
-import Quizzes from "./Quizzes";
-import TrueFalse from "./Quizzes/Editors/TrueFalse";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -95,10 +94,7 @@ function Courses() {
               element={<AssignmentEditor />}
             />
             <Route path="Grades" element={<Grades />} />
-            <Route path="Quizzes" element={<Quizzes />}>
-              <Route path="TrueFalse" element={<TrueFalse />} />
-              <Route path="Blanks" element={<TrueFalse />} />
-            </Route>
+            <Route path="Quizzes" element={<Quizzes />} />
           </Routes>
         </div>
       </div>
