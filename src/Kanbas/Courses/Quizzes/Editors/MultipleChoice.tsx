@@ -78,11 +78,15 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
           onChange={handleTitleChange}
         />
         <input
+          className="float-end"
           type="number"
           placeholder="Points"
           value={points}
           onChange={handlePointsChange}
         />
+        <label className="float-end me-2" htmlFor="Points">
+          Points:
+        </label>
       </div>
       <hr />
       <h5>Question:</h5>

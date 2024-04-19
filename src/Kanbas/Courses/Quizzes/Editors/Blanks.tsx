@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useNavigate } from "react-router-dom";
 
-function Blanks() {
+interface BlanksProps {
+  onSave: any;
+  onCancel: any;
+}
+
+function Blanks({ onSave, onCancel }: BlanksProps) {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState();
   const [question, setQuestion] = useState("");
@@ -36,23 +41,14 @@ function Blanks() {
     setBlanks(newBlanks);
   };
 
-  const handleTypeChange = (e: any) => {
-    let path;
-    switch (e.target.value) {
-      case "True/False":
-        path = "../TrueFalse";
-        break;
-      case "Fill In The Blanks":
-        path = "../Blanks";
-        break;
-      // case "Multiple Choice":
-      //   path = "../multiple-choice";
-      //   break;
-      default:
-        path = "/";
-        break;
-    }
-    navigate(path);
+  const handleSave = () => {
+    // Here you would handle the API call to save the data
+    console.log("Saved", { questionTitle, points, question, blanks });
+  };
+
+  const handleCancel = () => {
+    // Optional: Navigate to another route or simply clear the form
+    navigate("/");
   };
 
   return (
@@ -66,15 +62,6 @@ function Blanks() {
           value={questionTitle}
           onChange={handleTitleChange}
         />
-        <select
-          name="Question Type"
-          id="Question Type"
-          onChange={handleTypeChange}
-        >
-          <option value="Fill In The Blanks">Fill In The Blanks</option>
-          <option value="Multiple Choice">Multiple Choice</option>
-          <option value="True/False">True/False</option>
-        </select>
         <input
           className="float-end"
           type="number"
