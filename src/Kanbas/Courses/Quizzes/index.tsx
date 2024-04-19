@@ -33,6 +33,27 @@ function Quizzes() {
   const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
 
   const newQuizPage = () => {
+    const newQuiz = {
+      title: "New Quiz",
+      type: "GRADED QUIZ",
+      assignment_group: "QUIZZES",
+      shuffle: true,
+      time_limit: 20,
+      multiple_attempts: false,
+      show_correct_answers: "AFTER DEADLINE",
+      one_question_at_a_time: true,
+      webcam_required: false,
+      lock_questions_after_answering: false,
+      due_date: "2024-01-31",
+      available_date: "2024-01-01",
+      until_date: "2024-01-31",
+      points: "100",
+      questions: [],
+    };
+    client.createQuiz(courseId, newQuiz).then((quiz) => {
+      console.log(quiz);
+      dispatch(addQuiz(quiz));
+    });
     navigate(`/Kanbas/Courses/${courseId}/Quizzes/New`);
     console.log("Navigate to new quiz page");
   };

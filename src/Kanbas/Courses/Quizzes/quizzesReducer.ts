@@ -4,6 +4,15 @@ const initialState = {
   quizzes: [] as {
     _id: string;
     title: string;
+    type: string;
+    assignment_group: string;
+    shuffle: boolean;
+    time_limit: number;
+    multiple_attempts: boolean;
+    show_correct_answers: string;
+    one_question_at_a_time: boolean;
+    webcam_required: boolean;
+    lock_questions_after_answering: boolean;
     due_date: string;
     available_date: string;
     until_date: string;
@@ -11,10 +20,20 @@ const initialState = {
   }[],
   quiz: {
     title: "New Quiz",
+    type: "GRADED QUIZ",
+    assignment_group: "QUIZZES",
+    shuffle: true,
+    time_limit: 20,
+    multiple_attempts: false,
+    show_correct_answers: "AFTER DEADLINE",
+    one_question_at_a_time: true,
+    webcam_required: false,
+    lock_questions_after_answering: false,
     due_date: "2024-01-31",
     available_date: "2024-01-01",
     until_date: "2024-01-31",
     points: "100",
+    questions: [],
   },
 };
 
@@ -26,10 +45,20 @@ const quizzesSlice = createSlice({
       state.quizzes = [action.payload, ...state.quizzes];
       state.quiz = {
         title: "New Quiz",
+        type: "GRADED QUIZ",
+        assignment_group: "QUIZZES",
+        shuffle: true,
+        time_limit: 20,
+        multiple_attempts: false,
+        show_correct_answers: "AFTER DEADLINE",
+        one_question_at_a_time: true,
+        webcam_required: false,
+        lock_questions_after_answering: false,
         due_date: "2024-01-01",
         available_date: "2024-01-31",
         until_date: "2024-01-31",
         points: "100",
+        questions: [],
       };
     },
     deleteQuiz: (state, action) => {
@@ -47,10 +76,20 @@ const quizzesSlice = createSlice({
       });
       state.quiz = {
         title: "New Quiz",
+        type: "GRADED QUIZ",
+        assignment_group: "QUIZZES",
+        shuffle: true,
+        time_limit: 20,
+        multiple_attempts: false,
+        show_correct_answers: "AFTER DEADLINE",
+        one_question_at_a_time: true,
+        webcam_required: false,
+        lock_questions_after_answering: false,
         due_date: "2024-01-31",
         available_date: "2024-01-01",
         until_date: "2024-01-31",
         points: "100",
+        questions: [],
       };
     },
     setQuiz: (state, action) => {
