@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useNavigate } from "react-router-dom";
 
-function MultipleChoice() {
+interface MultipleChoiceProps {
+  onSave: any;
+  onCancel: any;
+}
+
+function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
   console.log("Rendering Multiple Choice");
   const [questionTitle, setQuestionTitle] = useState("Capital Cities Quiz");
   const [points, setPoints] = useState(10);

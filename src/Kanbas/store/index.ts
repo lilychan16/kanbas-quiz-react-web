@@ -18,6 +18,11 @@ export interface KanbasState {
     quizzes: any[];
     quiz: any;
   };
+
+  questionsReducer: {
+    questions: any[];
+    question: any;
+  };  
 }
 
 const store = configureStore({

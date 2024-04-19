@@ -5,6 +5,7 @@ import QuizEditor from "./QuizEditor";
 import { useSelector } from "react-redux";
 import { KanbasState } from "../../store";
 import { FaCheckCircle, FaBan } from "react-icons/fa";
+import QuestionsList from "./QuestionsList";
 import "./Editor.css";
 
 function Editor() {
@@ -39,7 +40,7 @@ function Editor() {
           Details
         </NavLink>
         <NavLink
-          to="MultipleChoice"
+          to="Questions"
           className={({ isActive }) =>
             isActive ? "nav-link active" : "nav-link"
           }
@@ -51,7 +52,7 @@ function Editor() {
       <Routes>
         <Route index element={<Navigate replace to="EditDetails" />} />
         <Route path="EditDetails" element={<QuizEditor />} />
-        <Route path="MultipleChoice" element={<MultipleChoice />} />
+        <Route path="Questions" element={<QuestionsList />} />
       </Routes>
     </div>
   );
