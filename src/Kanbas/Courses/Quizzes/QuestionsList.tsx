@@ -4,7 +4,7 @@ import Blanks from "./Editors/Blanks";
 import TrueFalse from "./Editors/TrueFalse";
 
 function QuestionsList() {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<any[]>([]);
   const [showEditor, setShowEditor] = useState(false);
   const [editorType, setEditorType] = useState("MultipleChoice"); // Default editor
 
@@ -17,7 +17,8 @@ function QuestionsList() {
     setEditorType(type);
   };
 
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = (newQuestion: any) => {
+    setQuestions([...questions, newQuestion]);
     setShowEditor(false);
   };
 

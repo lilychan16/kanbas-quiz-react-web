@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { RadioGroup, Radio } from "react-radio-group";
-import "./TrueFalse.css";
-import { useNavigate } from "react-router-dom";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+} from "@mui/material";
 
 interface TrueFalseProps {
   onSave: any;
@@ -11,10 +14,9 @@ interface TrueFalseProps {
 
 function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
   const [questionTitle, setQuestionTitle] = useState("");
-  const [points, setPoints] = useState();
+  const [points, setPoints] = useState(1);
   const [question, setQuestion] = useState("");
-  const [correctAnswer, setCorrectAnswer] = useState("");
-  const navigate = useNavigate();
+  const [correctAnswer, setCorrectAnswer] = useState<string[]>([]);
 
   const handleTitleChange = (e: any) => {
     setQuestionTitle(e.target.value);
@@ -24,22 +26,30 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
     setPoints(e.target.value);
   };
 
-  const handleQuestionChange = (e: any) => {
-    setQuestion(e.target.value);
+  const handleQuestionChange = (e: string) => {
+    setQuestion(e);
   };
 
-  const handleCorrectAnswerChange = (e: any) => {
-    setCorrectAnswer(e.target.value);
+  const handleCorrectAnswerChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    value: string,
+  ) => {
+    setCorrectAnswer([value]);
   };
 
   const handleSave = () => {
-    // Here you would handle the API call to save the data
-    console.log("Saved", { questionTitle, points, question });
+    const newQuestion = {
+      title: questionTitle,
+      points: points,
+      description: question,
+      correctAnswer: correctAnswer,
+    };
+    onSave(newQuestion);
+    console.log("Saved", { questionTitle, points, question, correctAnswer });
   };
 
   const handleCancel = () => {
-    // Optional: Navigate to another route or simply clear the form
-    navigate("/");
+    onCancel();
   };
 
   return (
@@ -81,25 +91,24 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
         <br />
         {/*Radio Buttons for the correct answer*/}
         <h5>The Correct Answer:</h5>
-        <RadioGroup
-          name="CorrectAnswer"
-          className="radio-button-group"
-          onChange={handleCorrectAnswerChange}
-        >
-          <label>
-            <Radio value="True" />
-            True
-          </label>
-          <br />
-          <label>
-            <Radio value="False" />
-            False
-          </label>
-        </RadioGroup>
+        <FormControl component="fieldset">
+          <RadioGroup
+            name="CorrectAnswer"
+            value={correctAnswer}
+            onChange={handleCorrectAnswerChange}
+          >
+            <FormControlLabel value="True" control={<Radio />} label="True" />
+            <FormControlLabel value="False" control={<Radio />} label="False" />
+          </RadioGroup>
+        </FormControl>
         <br />
         {/*Button to cancel and save the question*/}
-        <button className="btn btn-secondary me-2">Cancel</button>
-        <button className="btn btn-success">Update Question</button>
+        <button className="btn btn-secondary me-2" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn btn-success" onClick={handleSave}>
+          Update Question
+        </button>
       </div>
     </div>
   );

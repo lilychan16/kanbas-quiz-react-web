@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useNavigate } from "react-router-dom";
 
 interface BlanksProps {
   onSave: any;
@@ -9,10 +8,9 @@ interface BlanksProps {
 
 function Blanks({ onSave, onCancel }: BlanksProps) {
   const [questionTitle, setQuestionTitle] = useState("");
-  const [points, setPoints] = useState();
+  const [points, setPoints] = useState(1);
   const [question, setQuestion] = useState("");
   const [blanks, setBlanks] = useState([{ answer: "" }]); // Each blank has one answer
-  const navigate = useNavigate();
 
   const handleTitleChange = (e: any) => {
     setQuestionTitle(e.target.value);
@@ -22,8 +20,8 @@ function Blanks({ onSave, onCancel }: BlanksProps) {
     setPoints(e.target.value);
   };
 
-  const handleQuestionChange = (e: any) => {
-    setQuestion(e.target.value);
+  const handleQuestionChange = (e: string) => {
+    setQuestion(e);
   };
 
   const handleAnswerChange = (index: number, e: any) => {
@@ -42,13 +40,18 @@ function Blanks({ onSave, onCancel }: BlanksProps) {
   };
 
   const handleSave = () => {
-    // Here you would handle the API call to save the data
+    const newQuestion = {
+      title: questionTitle,
+      points: points,
+      description: question,
+      answers: blanks.map((blank) => blank.answer),
+    };
+    onSave(newQuestion);
     console.log("Saved", { questionTitle, points, question, blanks });
   };
 
   const handleCancel = () => {
-    // Optional: Navigate to another route or simply clear the form
-    navigate("/");
+    onCancel();
   };
 
   return (
@@ -114,8 +117,12 @@ function Blanks({ onSave, onCancel }: BlanksProps) {
         </button>
         <br />
         <br />
-        <button className="btn btn-secondary me-2">Cancel</button>
-        <button className="btn btn-success">Update Question</button>
+        <button className="btn btn-secondary me-2" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn btn-success" onClick={handleSave}>
+          Update Question
+        </button>
       </div>
     </div>
   );

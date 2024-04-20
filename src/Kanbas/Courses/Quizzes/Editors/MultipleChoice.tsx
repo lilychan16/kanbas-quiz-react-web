@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useNavigate } from "react-router-dom";
 
 interface MultipleChoiceProps {
   onSave: any;
@@ -10,17 +9,17 @@ interface MultipleChoiceProps {
 function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
   console.log("Rendering Multiple Choice");
   const [questionTitle, setQuestionTitle] = useState("Capital Cities Quiz");
-  const [points, setPoints] = useState(10);
+  const [points, setPoints] = useState(1);
   const [question, setQuestion] = useState(
     "<p>What is the capital of France?</p>",
   );
   const [choices, setChoices] = useState([
-    { text: "Paris", isCorrect: true },
-    { text: "London", isCorrect: false },
-    { text: "Berlin", isCorrect: false },
-    { text: "Madrid", isCorrect: false },
+    { text: "Paris" },
+    { text: "London" },
+    { text: "Berlin" },
+    { text: "Madrid" },
   ]);
-  const navigate = useNavigate();
+  const [correctAnswer, setCorrectAnswer] = useState<string[]>([]);
 
   const handleTitleChange = (e: any) => {
     setQuestionTitle(e.target.value);
@@ -30,7 +29,7 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
     setPoints(e.target.value);
   };
 
-  const handleQuestionChange = (content: any) => {
+  const handleQuestionChange = (content: string) => {
     setQuestion(content);
   };
 
@@ -40,16 +39,12 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
     setChoices(newChoices);
   };
 
-  const handleCorrectAnswerChange = (index: number) => {
-    const newChoices = choices.map((choice, idx) => ({
-      ...choice,
-      isCorrect: idx === index,
-    }));
-    setChoices(newChoices);
+  const handleCorrectAnswerChange = (e: string) => {
+    setCorrectAnswer([e]);
   };
 
   const addChoice = () => {
-    setChoices([...choices, { text: "", isCorrect: false }]);
+    setChoices([...choices, { text: "" }]);
   };
 
   const removeChoice = (index: number) => {
@@ -58,13 +53,25 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
   };
 
   const handleSave = () => {
-    // Here you would handle the API call to save the data
-    console.log("Saved", { questionTitle, points, question, choices });
+    const newQuestion = {
+      title: questionTitle,
+      points: points,
+      description: question,
+      choices: choices.map((choice) => choice.text),
+      correctAnswer: correctAnswer,
+    };
+    onSave(newQuestion);
+    console.log("Saved", {
+      questionTitle,
+      points,
+      question,
+      choices,
+      correctAnswer,
+    });
   };
 
   const handleCancel = () => {
-    // Optional: Navigate to another route or simply clear the form
-    navigate("/");
+    onCancel();
   };
 
   return (
@@ -95,30 +102,47 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
         value={question}
         onEditorChange={handleQuestionChange}
       />
+      <br />
       <h5>Choices:</h5>
       {choices.map((choice, index) => (
         <div key={index}>
           <input
+            className="me-2"
             type="text"
             value={choice.text}
             onChange={(e) => handleChoiceTextChange(index, e)}
             placeholder="Enter choice text"
           />
           <input
+            className="me-1"
             type="radio"
             name="correctAnswer"
-            checked={choice.isCorrect}
-            onChange={() => handleCorrectAnswerChange(index)}
+            id={`correctAnswer-${index}`}
+            onChange={() => handleCorrectAnswerChange(choice.text)}
           />
-          <label>Correct answer</label>
-          <button onClick={() => removeChoice(index)}>Remove Choice</button>
+          <label className="me-2" htmlFor={`correctAnswer-${index}`}>
+            Correct answer
+          </label>
+          <button
+            className="btn btn-danger mb-2"
+            onClick={() => removeChoice(index)}
+          >
+            Remove Choice
+          </button>
         </div>
       ))}
-      <button onClick={addChoice}>Add Choice</button>
+      <button className="btn btn-primary" onClick={addChoice}>
+        Add Choice
+      </button>
       <br />
       <br />
-      <button onClick={handleCancel}>Cancel</button>
-      <button onClick={handleSave}>Save/Update Question</button>
+      {/*Button to cancel and save the question*/}
+      <button className="btn btn-secondary me-2" onClick={handleCancel}>
+        Cancel
+      </button>
+      <button className="btn btn-success" onClick={handleSave}>
+        Update Question
+      </button>
     </div>
   );
 }
