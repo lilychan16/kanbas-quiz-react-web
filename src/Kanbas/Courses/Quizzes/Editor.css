@@ -1,9 +1,8 @@
+.nav-link {
+  color: red !important; /* Default color for inactive links */
+}
 
 .nav-link.active {
-    color: red !important; /* Use !important to override default Bootstrap styles */
-  }
-
-  .nav-link {
-    color: grey; /* Use !important to override default Bootstrap styles */
-  }
-  
+  color: black !important; /* Black color for active links */
+  text-decoration: underline; /* Underline for active links */
+}

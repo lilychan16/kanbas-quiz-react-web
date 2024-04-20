@@ -79,15 +79,26 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
       />
       <input
         type="number"
+        className="float-end"
         placeholder="Points"
         value={points}
         onChange={handlePointsChange}
       />
+      <label className="float-end me-2" htmlFor="Points">
+        Points:
+      </label>
+      <hr />
+      <h6>
+        Enter your question and multiple answers, then select the one correct
+        answer.
+      </h6>
+      <h5>Question:</h5>
       <Editor
         apiKey="0i3zt6aumj20bavirmshczszr45gz2oza5d9ru6x2y9ucv00"
         value={question}
         onEditorChange={handleQuestionChange}
       />
+      <br />
       {choices.map((choice, index) => (
         <div key={index}>
           <input
@@ -112,6 +123,8 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
       <button className="btn btn-primary" onClick={addChoice}>
         Add Choice
       </button>
+      <br />
+      <br />
       <button className="btn btn-secondary me-2" onClick={handleCancel}>
         Cancel
       </button>

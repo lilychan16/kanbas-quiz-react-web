@@ -66,7 +66,7 @@ function QuizDetail() {
             value={quizData.title}
             onChange={handleChange}
             className="form-control"
-            style={{ width: "95%", marginLeft: "10px" }}
+            style={{ width: "98%", marginLeft: "10px" }}
           />
         </div>
       </div>

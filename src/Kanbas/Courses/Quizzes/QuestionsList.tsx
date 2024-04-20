@@ -86,9 +86,17 @@ function QuestionsList() {
 
   return (
     <div>
+      <br />
+      <div>
+        {quizData.questions.map((question: any, index: any) => (
+          <div key={index}>
+            Question {index + 1}: {question.title} - {question.type}
+          </div>
+        ))}
+      </div>
       {!showEditor && (
         <button
-          className="btn btn-primary"
+          className="btn btn-secondary"
           onClick={() => {
             setEditorType("MultipleChoice");
             setShowEditor(true);
@@ -114,13 +122,7 @@ function QuestionsList() {
           {renderEditor()}{" "}
         </>
       )}
-      <div>
-        {quizData.questions.map((question: any, index: any) => (
-          <div key={index}>
-            Question {index + 1}: {question.title} - {question.type}
-          </div>
-        ))}
-      </div>
+      <hr />
       <div className="d-flex justify-content-end gap-1">
         <button
           type="button"
@@ -140,6 +142,7 @@ function QuestionsList() {
           Save
         </button>
       </div>
+      <hr />
     </div>
   );
 }
