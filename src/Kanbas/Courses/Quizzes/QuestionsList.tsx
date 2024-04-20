@@ -1,25 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { KanbasState } from "../../store";
+import { updateQuiz as updateQuizRedux } from "../Quizzes/quizzesReducer";
+import { updateQuiz as updateQuizAPI } from "./client";
 import MultipleChoice from "./Editors/MultipleChoice";
 import Blanks from "./Editors/Blanks";
 import TrueFalse from "./Editors/TrueFalse";
 
 function QuestionsList() {
-  const [questions, setQuestions] = useState<any[]>([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
+
+  const [quizData, setQuizData] = useState(quiz);
   const [showEditor, setShowEditor] = useState(false);
-  const [editorType, setEditorType] = useState("MultipleChoice"); // Default editor
+  const [editorType, setEditorType] = useState("MultipleChoice");
 
-  const handleAddQuestion = () => {
-    setShowEditor(true);
-    setEditorType("MultipleChoice"); // Default to 'MultipleChoice' when adding a new question
-  };
-
-  const handleEditorTypeChange = (type: any) => {
-    setEditorType(type);
-  };
+  useEffect(() => {
+    setQuizData(quiz);
+  }, [quiz]);
 
   const handleSaveQuestion = (newQuestion: any) => {
-    setQuestions([...questions, newQuestion]);
+    const updatedQuestions = [...quizData.questions, newQuestion];
+    setQuizData({ ...quizData, questions: updatedQuestions });
     setShowEditor(false);
+  };
+
+  const handleSave = async () => {
+    try {
+      const updatedQuiz = await updateQuizAPI(quizData);
+      dispatch(updateQuizRedux(updatedQuiz));
+      navigate(`/Kanbas/Courses/${quiz.course}/Quizzes`);
+    } catch (error) {
+      console.error("Error updating quiz:", error);
+    }
+  };
+
+  const handleSaveAndPublish = async () => {
+    try {
+      const updatedQuizData = { ...quizData, published: true };
+      const updatedQuiz = await updateQuizAPI(updatedQuizData);
+      dispatch(updateQuizRedux(updatedQuiz));
+      navigate(`/Kanbas/Courses/${quiz.course}/Quizzes`);
+    } catch (error) {
+      console.error("Error updating quiz and publish:", error);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(`/Kanbas/Courses/${quiz.course}/Quizzes`);
+  };
+
+  const handleEditorTypeChange = (e: any) => {
+    setEditorType(e.target.value);
   };
 
   const renderEditor = () => {
@@ -53,7 +87,13 @@ function QuestionsList() {
   return (
     <div>
       {!showEditor && (
-        <button className="btn btn-primary" onClick={handleAddQuestion}>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            setEditorType("MultipleChoice");
+            setShowEditor(true);
+          }}
+        >
           + New Question
         </button>
       )}
@@ -65,26 +105,41 @@ function QuestionsList() {
           <select
             name="editorType"
             value={editorType}
-            onChange={(e) => handleEditorTypeChange(e.target.value)}
+            onChange={handleEditorTypeChange}
           >
             <option value="MultipleChoice">Multiple Choice</option>
             <option value="Blanks">Fill In The Blanks</option>
             <option value="TrueFalse">True/False</option>
           </select>
-          {renderEditor()}
+          {renderEditor()}{" "}
         </>
       )}
-      {!showEditor && questions.length > 0 && (
-        <div>
-          {questions.map((question, index) => (
-            <div key={index}>
-              {/* Display the question here */}
-              Question {index + 1}
-              {/* You can render the MultipleChoice component here with question details if needed */}
-            </div>
-          ))}
-        </div>
-      )}
+      <div>
+        {quizData.questions.map((question: any, index: any) => (
+          <div key={index}>
+            Question {index + 1}: {question.title} - {question.type}
+          </div>
+        ))}
+      </div>
+      <div className="d-flex justify-content-end gap-1">
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="btn btn-secondary"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={handleSaveAndPublish}
+          className="btn btn-secondary"
+        >
+          Save & Publish
+        </button>
+        <button type="button" onClick={handleSave} className="btn btn-danger">
+          Save
+        </button>
+      </div>
     </div>
   );
 }

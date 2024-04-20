@@ -1,46 +1,46 @@
 import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
+interface Choice {
+  text: string;
+  _id?: string; // Optional, as new choices might not have an ID initially
+}
+
 interface MultipleChoiceProps {
-  onSave: any;
-  onCancel: any;
+  onSave: (newQuestion: any) => void;
+  onCancel: () => void;
 }
 
 function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
-  console.log("Rendering Multiple Choice");
-  const [questionTitle, setQuestionTitle] = useState("Capital Cities Quiz");
+  const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState(1);
-  const [question, setQuestion] = useState(
-    "<p>What is the capital of France?</p>",
-  );
-  const [choices, setChoices] = useState([
-    { text: "Paris" },
-    { text: "London" },
-    { text: "Berlin" },
-    { text: "Madrid" },
-  ]);
-  const [correctAnswer, setCorrectAnswer] = useState<string[]>([]);
+  const [question, setQuestion] = useState("");
+  const [choices, setChoices] = useState<Choice[]>([]);
+  const [correctAnswer, setCorrectAnswer] = useState<string>("");
 
-  const handleTitleChange = (e: any) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuestionTitle(e.target.value);
   };
 
-  const handlePointsChange = (e: any) => {
-    setPoints(e.target.value);
+  const handlePointsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPoints(Number(e.target.value));
   };
 
   const handleQuestionChange = (content: string) => {
     setQuestion(content);
   };
 
-  const handleChoiceTextChange = (index: number, e: any) => {
+  const handleChoiceTextChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const newChoices = [...choices];
     newChoices[index].text = e.target.value;
     setChoices(newChoices);
   };
 
-  const handleCorrectAnswerChange = (e: string) => {
-    setCorrectAnswer([e]);
+  const handleCorrectAnswerChange = (choiceText: string) => {
+    setCorrectAnswer(choiceText);
   };
 
   const addChoice = () => {
@@ -56,18 +56,12 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
     const newQuestion = {
       title: questionTitle,
       points: points,
-      description: question,
-      choices: choices.map((choice) => choice.text),
-      correctAnswer: correctAnswer,
+      question_content: question,
+      choices: choices.map((choice) => ({ content: choice.text })),
+      answers: [{ content: correctAnswer }],
+      type: "MULTIPLE CHOICES",
     };
     onSave(newQuestion);
-    console.log("Saved", {
-      questionTitle,
-      points,
-      question,
-      choices,
-      correctAnswer,
-    });
   };
 
   const handleCancel = () => {
@@ -77,66 +71,43 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
   return (
     <div>
       <h1>Multiple Choice Question Editor</h1>
-      <div>
-        <input
-          type="text"
-          placeholder="Question Title"
-          value={questionTitle}
-          onChange={handleTitleChange}
-        />
-        <input
-          className="float-end"
-          type="number"
-          placeholder="Points"
-          value={points}
-          onChange={handlePointsChange}
-        />
-        <label className="float-end me-2" htmlFor="Points">
-          Points:
-        </label>
-      </div>
-      <hr />
-      <h5>Question:</h5>
+      <input
+        type="text"
+        placeholder="Question Title"
+        value={questionTitle}
+        onChange={handleTitleChange}
+      />
+      <input
+        type="number"
+        placeholder="Points"
+        value={points}
+        onChange={handlePointsChange}
+      />
       <Editor
         apiKey="0i3zt6aumj20bavirmshczszr45gz2oza5d9ru6x2y9ucv00"
         value={question}
         onEditorChange={handleQuestionChange}
       />
-      <br />
-      <h5>Choices:</h5>
       {choices.map((choice, index) => (
         <div key={index}>
           <input
-            className="me-2"
             type="text"
             value={choice.text}
             onChange={(e) => handleChoiceTextChange(index, e)}
             placeholder="Enter choice text"
           />
           <input
-            className="me-1"
             type="radio"
             name="correctAnswer"
-            id={`correctAnswer-${index}`}
+            checked={correctAnswer === choice.text}
             onChange={() => handleCorrectAnswerChange(choice.text)}
           />
-          <label className="me-2" htmlFor={`correctAnswer-${index}`}>
-            Correct answer
-          </label>
-          <button
-            className="btn btn-danger mb-2"
-            onClick={() => removeChoice(index)}
-          >
-            Remove Choice
-          </button>
+          <button onClick={() => removeChoice(index)}>Remove</button>
         </div>
       ))}
       <button className="btn btn-primary" onClick={addChoice}>
         Add Choice
       </button>
-      <br />
-      <br />
-      {/*Button to cancel and save the question*/}
       <button className="btn btn-secondary me-2" onClick={handleCancel}>
         Cancel
       </button>
