@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addQuiz, deleteQuiz, setQuiz, updateQuiz } from "../quizzesReducer";
 import { FaEllipsisV, FaCheckCircle, FaPencilAlt, FaBan } from "react-icons/fa";
@@ -11,8 +11,6 @@ function QuizDetail() {
     const quiz = useSelector(
         (state: KanbasState) => state.quizzesReducer.quiz
     );
-    const [published, setPublished] = useState(quiz.published);
-    console.log(published);
 
     const { courseId } = useParams();
     const navigate = useNavigate();
@@ -28,9 +26,8 @@ function QuizDetail() {
         console.log("Navigate to quiz preview page");
     };
 
-    const handlePublishUnpublish = () => {
-        const newPublished = !published;
-        setPublished(newPublished);
+    const handlePublishUnpublish = (quiz: any) => {
+        const newPublished = !quiz.published;
         const updatedQuiz = { ...quiz, published: newPublished };
         dispatch(setQuiz(updatedQuiz));
         client.updateQuiz(updatedQuiz).then((status) => {
@@ -38,17 +35,23 @@ function QuizDetail() {
         });
     };
 
+    useEffect(() => {
+        client.findQuizById(quizId).then((quiz) => {
+          dispatch(setQuiz(quiz));
+        });
+    }, [quizId]);
+
     return (
       <div className="ms-5 col-lg-8">
         <div className="d-flex justify-content-end">
           <button
             className={`btn ${
-              published ? "btn-danger" : "btn-success"
+              quiz.published ? "btn-danger" : "btn-success"
             } me-1 button-size`}
 
-            onClick={handlePublishUnpublish}
+            onClick={() => {handlePublishUnpublish(quiz)}}
           >
-            {published ? "Unpublish" : "Publish"}
+            {quiz.published ? "Unpublish" : "Publish"}
           </button>
           <button 
             className="btn btn-secondary me-2 button-color button-size" 
