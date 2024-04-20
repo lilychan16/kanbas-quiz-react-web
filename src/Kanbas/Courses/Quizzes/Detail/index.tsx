@@ -23,6 +23,11 @@ function QuizDetail() {
         console.log("Navigate to quiz edit page");
     };
 
+    const quizPreviewPage = () => {
+        navigate(`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview`);
+        console.log("Navigate to quiz preview page");
+    };
+
     const handlePublishUnpublish = () => {
         const newPublished = !published;
         setPublished(newPublished);
@@ -45,7 +50,9 @@ function QuizDetail() {
           >
             {published ? "Unpublish" : "Publish"}
           </button>
-          <button className="btn btn-secondary me-2 button-color button-size">
+          <button 
+            className="btn btn-secondary me-2 button-color button-size" 
+            onClick={quizPreviewPage}>
             Preview
           </button>
           <button

@@ -21,6 +21,7 @@ import Quizzes from "./Quizzes";
 import axios from "axios";
 import * as client from "../client";
 import QuizDetail from "./Quizzes/Detail";
+import QuizPreview from "./Quizzes/Preview";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -97,6 +98,7 @@ function Courses() {
             <Route path="Grades" element={<Grades />} />
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/:quizId" element={<QuizDetail />} />
+            <Route path="Quizzes/:quizId/Preview" element={<QuizPreview />} />
           </Routes>
         </div>
       </div>
