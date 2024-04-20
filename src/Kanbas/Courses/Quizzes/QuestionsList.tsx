@@ -32,7 +32,12 @@ function QuestionsList() {
 
   const handleSaveNewQuestion = (newQuestion: any) => {
     const updatedQuestions = [...quizData.questions, newQuestion];
-    setQuizData({ ...quizData, questions: updatedQuestions });
+    const totalPoints = calculateTotalPoints(updatedQuestions);
+    setQuizData({
+      ...quizData,
+      questions: updatedQuestions,
+      points: totalPoints,
+    });
     setShowEditor(false);
     setSelectedQuestion(null);
   };
@@ -44,7 +49,12 @@ function QuestionsList() {
       }
       return q;
     });
-    setQuizData({ ...quizData, questions: updatedQuestions });
+    const totalPoints = calculateTotalPoints(updatedQuestions);
+    setQuizData({
+      ...quizData,
+      questions: updatedQuestions,
+      points: totalPoints,
+    });
     setShowEditor(false);
     setSelectedQuestion(null);
   };
@@ -82,6 +92,13 @@ function QuestionsList() {
   const handleEditorTypeChange = (e: any) => {
     setSelectedQuestion(null);
     setEditorType(e.target.value);
+  };
+
+  const calculateTotalPoints = (questions: any) => {
+    return questions.reduce(
+      (accumulator: number, question: any) => accumulator + question.points,
+      0,
+    );
   };
 
   const renderEditor = () => {
