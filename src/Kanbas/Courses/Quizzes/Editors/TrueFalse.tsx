@@ -8,15 +8,15 @@ import {
 } from "@mui/material";
 
 interface TrueFalseProps {
-  onSave: any;
-  onCancel: any;
+  onSave: (newQuestion: any) => void;
+  onCancel: () => void;
 }
 
 function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState(1);
   const [question, setQuestion] = useState("");
-  const [correctAnswer, setCorrectAnswer] = useState<string[]>([]);
+  const [correctAnswer, setCorrectAnswer] = useState("");
 
   const handleTitleChange = (e: any) => {
     setQuestionTitle(e.target.value);
@@ -34,18 +34,19 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
     e: React.ChangeEvent<HTMLInputElement>,
     value: string,
   ) => {
-    setCorrectAnswer([value]);
+    setCorrectAnswer(value);
   };
 
   const handleSave = () => {
     const newQuestion = {
       title: questionTitle,
       points: points,
-      description: question,
-      correctAnswer: correctAnswer,
+      question_content: question,
+      answers: [{ content: correctAnswer }],
+      type: "TRUE OR FALSE",
     };
     onSave(newQuestion);
-    console.log("Saved", { questionTitle, points, question, correctAnswer });
+    console.log("Saved", newQuestion);
   };
 
   const handleCancel = () => {

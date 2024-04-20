@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 interface BlanksProps {
-  onSave: any;
-  onCancel: any;
+  onSave: (newQuestion: any) => void;
+  onCancel: () => void;
 }
 
 function Blanks({ onSave, onCancel }: BlanksProps) {
@@ -43,11 +43,12 @@ function Blanks({ onSave, onCancel }: BlanksProps) {
     const newQuestion = {
       title: questionTitle,
       points: points,
-      description: question,
-      answers: blanks.map((blank) => blank.answer),
+      question_content: question,
+      answers: blanks.map((blank) => ({ content: blank.answer })),
+      type: "FILL IN BLANKS",
     };
     onSave(newQuestion);
-    console.log("Saved", { questionTitle, points, question, blanks });
+    console.log("Saved", newQuestion);
   };
 
   const handleCancel = () => {
