@@ -102,9 +102,13 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
             checked={correctAnswer === choice.text}
             onChange={() => handleCorrectAnswerChange(choice.text)}
           />
+          <label onClick={() => handleCorrectAnswerChange(choice.text)}>
+            Set as correct choice
+          </label>
           <button onClick={() => removeChoice(index)}>Remove</button>
         </div>
       ))}
+
       <button className="btn btn-primary" onClick={addChoice}>
         Add Choice
       </button>
