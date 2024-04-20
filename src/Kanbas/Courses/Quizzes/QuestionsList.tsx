@@ -7,6 +7,7 @@ import { updateQuiz as updateQuizAPI } from "./client";
 import MultipleChoice from "./Editors/MultipleChoice";
 import Blanks from "./Editors/Blanks";
 import TrueFalse from "./Editors/TrueFalse";
+import "./QuestionsList.css";
 
 function QuestionsList() {
   const navigate = useNavigate();
@@ -15,16 +16,37 @@ function QuestionsList() {
 
   const [quizData, setQuizData] = useState(quiz);
   const [showEditor, setShowEditor] = useState(false);
-  const [editorType, setEditorType] = useState("MultipleChoice");
+  const [editorType, setEditorType] = useState("MULTIPLE CHOICES");
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   useEffect(() => {
     setQuizData(quiz);
   }, [quiz]);
 
-  const handleSaveQuestion = (newQuestion: any) => {
+  const handleSelectQuestion = (question: any, type: string) => {
+    setSelectedQuestion(question);
+    setEditorType(type);
+    setShowEditor(true);
+    console.log("Selected", question, type, showEditor);
+  };
+
+  const handleSaveNewQuestion = (newQuestion: any) => {
     const updatedQuestions = [...quizData.questions, newQuestion];
     setQuizData({ ...quizData, questions: updatedQuestions });
     setShowEditor(false);
+    setSelectedQuestion(null);
+  };
+
+  const handleUpdateQuestion = (updatedQuestion: any) => {
+    const updatedQuestions = quizData.questions.map((q: any) => {
+      if (q._id === updatedQuestion._id) {
+        return updatedQuestion;
+      }
+      return q;
+    });
+    setQuizData({ ...quizData, questions: updatedQuestions });
+    setShowEditor(false);
+    setSelectedQuestion(null);
   };
 
   const handleSave = async () => {
@@ -52,31 +74,43 @@ function QuestionsList() {
     navigate(`/Kanbas/Courses/${quiz.course}/Quizzes`);
   };
 
+  const handleEditorCancel = () => {
+    setSelectedQuestion(null);
+    setShowEditor(false);
+  };
+
   const handleEditorTypeChange = (e: any) => {
+    setSelectedQuestion(null);
     setEditorType(e.target.value);
   };
 
   const renderEditor = () => {
     switch (editorType) {
-      case "MultipleChoice":
+      case "MULTIPLE CHOICES":
         return (
           <MultipleChoice
-            onSave={handleSaveQuestion}
-            onCancel={() => setShowEditor(false)}
+            question={selectedQuestion}
+            onSave={handleSaveNewQuestion}
+            onUpdate={handleUpdateQuestion}
+            onCancel={handleEditorCancel}
           />
         );
-      case "Blanks":
+      case "FILL IN BLANKS":
         return (
           <Blanks
-            onSave={handleSaveQuestion}
-            onCancel={() => setShowEditor(false)}
+            question={selectedQuestion}
+            onSave={handleSaveNewQuestion}
+            onUpdate={handleUpdateQuestion}
+            onCancel={handleEditorCancel}
           />
         );
-      case "TrueFalse":
+      case "TRUE OR FALSE":
         return (
           <TrueFalse
-            onSave={handleSaveQuestion}
-            onCancel={() => setShowEditor(false)}
+            question={selectedQuestion}
+            onSave={handleSaveNewQuestion}
+            onUpdate={handleUpdateQuestion}
+            onCancel={handleEditorCancel}
           />
         );
       default:
@@ -89,7 +123,11 @@ function QuestionsList() {
       <br />
       <div>
         {quizData.questions.map((question: any, index: any) => (
-          <div key={index}>
+          <div
+            key={question.id || index}
+            onClick={() => handleSelectQuestion(question, question.type)}
+            className="quiz-question-link"
+          >
             Question {index + 1}: {question.title} - {question.type}
           </div>
         ))}
@@ -98,7 +136,7 @@ function QuestionsList() {
         <button
           className="btn btn-secondary"
           onClick={() => {
-            setEditorType("MultipleChoice");
+            setEditorType("MULTIPLE CHOICES");
             setShowEditor(true);
           }}
         >
@@ -108,16 +146,16 @@ function QuestionsList() {
       {showEditor && (
         <>
           <label className="me-2 mt-2" htmlFor="editorType">
-            New Question Type:
+            Question Type:
           </label>
           <select
             name="editorType"
             value={editorType}
             onChange={handleEditorTypeChange}
           >
-            <option value="MultipleChoice">Multiple Choice</option>
-            <option value="Blanks">Fill In The Blanks</option>
-            <option value="TrueFalse">True/False</option>
+            <option value="MULTIPLE CHOICES">Multiple Choice</option>
+            <option value="FILL IN BLANKS">Fill In The Blanks</option>
+            <option value="TRUE OR FALSE">True/False</option>
           </select>
           {renderEditor()}{" "}
         </>

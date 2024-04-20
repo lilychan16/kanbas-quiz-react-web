@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import {
   Radio,
@@ -9,14 +9,25 @@ import {
 
 interface TrueFalseProps {
   onSave: (newQuestion: any) => void;
+  onUpdate: (updatedQuestion: any) => void;
   onCancel: () => void;
+  question?: any;
 }
 
-function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
+function TrueFalse({ onSave, onUpdate, onCancel, question }: TrueFalseProps) {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState(1);
-  const [question, setQuestion] = useState("");
+  const [questionContent, setQuestionContent] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("");
+
+  useEffect(() => {
+    if (question) {
+      setQuestionTitle(question.title);
+      setPoints(question.points);
+      setQuestionContent(question.question_content);
+      setCorrectAnswer(question.answers[0].content);
+    }
+  }, [question]);
 
   const handleTitleChange = (e: any) => {
     setQuestionTitle(e.target.value);
@@ -27,7 +38,7 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
   };
 
   const handleQuestionChange = (e: string) => {
-    setQuestion(e);
+    setQuestionContent(e);
   };
 
   const handleCorrectAnswerChange = (
@@ -38,15 +49,28 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
   };
 
   const handleSave = () => {
-    const newQuestion = {
-      title: questionTitle,
-      points: points,
-      question_content: question,
-      answers: [{ content: correctAnswer }],
-      type: "TRUE OR FALSE",
-    };
-    onSave(newQuestion);
-    console.log("Saved", newQuestion);
+    if (question) {
+      const updatedQuestion = {
+        _id: question._id,
+        title: questionTitle,
+        points: points,
+        question_content: questionContent,
+        answers: [{ content: correctAnswer }],
+        type: "TRUE OR FALSE",
+      };
+      onUpdate(updatedQuestion);
+      console.log("Updated", updatedQuestion);
+    } else {
+      const newQuestion = {
+        title: questionTitle,
+        points: points,
+        question_content: questionContent,
+        answers: [{ content: correctAnswer }],
+        type: "TRUE OR FALSE",
+      };
+      onSave(newQuestion);
+      console.log("Saved", newQuestion);
+    }
   };
 
   const handleCancel = () => {
@@ -86,7 +110,7 @@ function TrueFalse({ onSave, onCancel }: TrueFalseProps) {
         {/*TinyMCE Editor*/}
         <Editor
           apiKey="e1ioznczok5yus73u6oqwh6dbb6gszw6rln4i87qmz9y4hc2"
-          value={question}
+          value={questionContent}
           onEditorChange={handleQuestionChange}
         />
         <br />

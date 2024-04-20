@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 interface Choice {
@@ -8,15 +8,32 @@ interface Choice {
 
 interface MultipleChoiceProps {
   onSave: (newQuestion: any) => void;
+  onUpdate: (updatedQuestion: any) => void;
   onCancel: () => void;
+  question?: any;
 }
 
-function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
+function MultipleChoice({
+  onSave,
+  onUpdate,
+  onCancel,
+  question,
+}: MultipleChoiceProps) {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState(1);
-  const [question, setQuestion] = useState("");
+  const [questionContent, setQuestionContent] = useState("");
   const [choices, setChoices] = useState<Choice[]>([]);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
+
+  useEffect(() => {
+    if (question) {
+      setQuestionTitle(question.title);
+      setPoints(question.points);
+      setQuestionContent(question.question_content);
+      setChoices(question.choices.map((c: any) => ({ text: c.content })));
+      setCorrectAnswer(question.answers[0].content);
+    }
+  }, [question]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuestionTitle(e.target.value);
@@ -27,7 +44,7 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
   };
 
   const handleQuestionChange = (content: string) => {
-    setQuestion(content);
+    setQuestionContent(content);
   };
 
   const handleChoiceTextChange = (
@@ -53,15 +70,30 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
   };
 
   const handleSave = () => {
-    const newQuestion = {
-      title: questionTitle,
-      points: points,
-      question_content: question,
-      choices: choices.map((choice) => ({ content: choice.text })),
-      answers: [{ content: correctAnswer }],
-      type: "MULTIPLE CHOICES",
-    };
-    onSave(newQuestion);
+    if (question) {
+      const updatedQuestion = {
+        _id: question._id,
+        title: questionTitle,
+        points: points,
+        question_content: questionContent,
+        choices: choices.map((choice) => ({ content: choice.text })),
+        answers: [{ content: correctAnswer }],
+        type: "MULTIPLE CHOICES",
+      };
+      onUpdate(updatedQuestion);
+      console.log("Updated", updatedQuestion);
+    } else {
+      const newQuestion = {
+        title: questionTitle,
+        points: points,
+        question_content: questionContent,
+        choices: choices.map((choice) => ({ content: choice.text })),
+        answers: [{ content: correctAnswer }],
+        type: "MULTIPLE CHOICES",
+      };
+      onSave(newQuestion);
+      console.log("Saved", newQuestion);
+    }
   };
 
   const handleCancel = () => {
@@ -95,7 +127,7 @@ function MultipleChoice({ onSave, onCancel }: MultipleChoiceProps) {
       <h5>Question:</h5>
       <Editor
         apiKey="0i3zt6aumj20bavirmshczszr45gz2oza5d9ru6x2y9ucv00"
-        value={question}
+        value={questionContent}
         onEditorChange={handleQuestionChange}
       />
       <br />
