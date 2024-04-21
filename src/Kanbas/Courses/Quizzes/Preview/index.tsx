@@ -6,7 +6,7 @@ import * as client from "../client";
 import { setQuiz } from "../quizzesReducer";
 import { BsExclamationCircle, BsQuestionCircle } from "react-icons/bs";
 import { FaPencilAlt } from "react-icons/fa";
-import { GoTriangleRight } from "react-icons/go";
+import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 import "./index.css";
 import DOMPurify from "dompurify";
 
@@ -48,6 +48,15 @@ function QuizPreview() {
     // Navigate to the next question, nextIndex + 1 should match the question number being displayed
     navigate(
       `/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview/${nextIndex + 1}`,
+    );
+  };
+
+  const handlePreviousQuestion = () => {
+    const previousIndex = selectedQuestionIndex - 1;
+    setSelectedQuestionIndex(previousIndex);
+    // Navigate to the previous question, previousIndex + 1 should match the question number being displayed
+    navigate(
+      `/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview/${previousIndex + 1}`,
     );
   };
 
@@ -152,9 +161,17 @@ function QuizPreview() {
           className="d-flex justify-content-end"
           style={{ marginTop: "30px", marginBottom: "30px" }}
         >
-          {selectedQuestionIndex < quiz?.questions.length - 1 && (
+          {selectedQuestionIndex > 0 && (
             <button
               className="btn btn-secondary preview-button-color"
+              onClick={handlePreviousQuestion}
+            >
+              <GoTriangleLeft /> Previous
+            </button>
+          )}
+          {selectedQuestionIndex < quiz?.questions.length - 1 && (
+            <button
+              className="btn btn-secondary preview-button-color ms-2"
               onClick={handleNextQuestion}
             >
               Next <GoTriangleRight />
