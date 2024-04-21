@@ -44,7 +44,6 @@ function TrueFalse({ onSave, onUpdate, onCancel, question }: TrueFalseProps) {
   const handleCorrectAnswerChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     value: string,
-
   ) => {
     setCorrectAnswer(value);
   };
@@ -66,6 +65,7 @@ function TrueFalse({ onSave, onUpdate, onCancel, question }: TrueFalseProps) {
         title: questionTitle,
         points: points,
         question_content: questionContent,
+        choices: [{ content: "True" }, { content: "False" }],
         answers: [{ content: correctAnswer }],
         type: "TRUE OR FALSE",
       };
