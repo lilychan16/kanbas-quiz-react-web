@@ -1,17 +1,29 @@
-import React from "react";
-import { NavLink, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { NavLink, Routes, Route, Navigate, useParams } from "react-router-dom";
 import MultipleChoice from "./Editors/MultipleChoice";
 import QuizEditor from "./QuizEditor";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { KanbasState } from "../../store";
 import { FaCheckCircle, FaBan } from "react-icons/fa";
 import QuestionsList from "./QuestionsList";
 import "./Editor.css";
+import * as client from "./client";
+import { setQuiz } from "./quizzesReducer";
 
 function Editor() {
+  const { quizId } = useParams();
+  const dispatch = useDispatch();
+
   const quizData = useSelector(
     (state: KanbasState) => state.quizzesReducer.quiz,
   );
+
+  useEffect(() => {
+    client.findQuizById(quizId).then((quizData) => {
+      dispatch(setQuiz(quizData));
+    });
+  }, [quizId]);
+
   console.log(quizData);
   return (
     <div>
