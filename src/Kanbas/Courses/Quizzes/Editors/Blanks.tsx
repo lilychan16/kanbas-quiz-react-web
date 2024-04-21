@@ -51,6 +51,14 @@ function Blanks({ onSave, onUpdate, onCancel, question }: BlanksProps) {
   };
 
   const handleSave = () => {
+    if (blanks.length === 0) {
+      alert("Please add at least one blank.");
+      return;
+    }
+    if (blanks.some((blank) => blank.answer === "")) {
+      alert("Please fill in all blanks or remove empty blanks.");
+      return;
+    }
     if (question) {
       const updatedQuestion = {
         _id: question._id,

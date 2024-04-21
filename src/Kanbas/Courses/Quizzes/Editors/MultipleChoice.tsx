@@ -70,6 +70,23 @@ function MultipleChoice({
   };
 
   const handleSave = () => {
+    if (choices.length === 0 || choices.some((choice) => choice.text === "")) {
+      alert("Please add and fill in all choices.");
+      return;
+    }
+    if (correctAnswer === "") {
+      alert("Please select or add a correct answer.");
+      return;
+    }
+
+    const isCorrectAnswerIncluded = choices.some(
+      (choice) => choice.text === correctAnswer,
+    );
+    if (!isCorrectAnswerIncluded) {
+      alert("The correct answer must be one of the choices.");
+      return;
+    }
+
     if (question) {
       const updatedQuestion = {
         _id: question._id,
@@ -137,7 +154,6 @@ function MultipleChoice({
             type="text"
             value={choice.text}
             className="me-2"
-
             onChange={(e) => handleChoiceTextChange(index, e)}
             placeholder="Enter choice text"
           />

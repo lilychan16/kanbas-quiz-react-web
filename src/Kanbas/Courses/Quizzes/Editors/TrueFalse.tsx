@@ -49,6 +49,10 @@ function TrueFalse({ onSave, onUpdate, onCancel, question }: TrueFalseProps) {
   };
 
   const handleSave = () => {
+    if (correctAnswer === "") {
+      alert("Please select a correct answer.");
+      return;
+    }
     if (question) {
       const updatedQuestion = {
         _id: question._id,
