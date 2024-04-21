@@ -20,6 +20,11 @@ function QuizDetail() {
   };
 
   const quizPreviewPage = () => {
+    if (quiz.questions.length < 1) {
+      alert("No questions in this quiz, please add some.");
+      console.log("Preview clicked when no questions in quiz.");
+      return;
+    }
     navigate(`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview/1`);
     console.log("Navigate to quiz preview page");
   };
