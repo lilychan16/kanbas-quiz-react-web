@@ -18,6 +18,7 @@
     "axios": "^1.6.8",
     "bootstrap": "^5.3.2",
     "cors": "^2.8.5",
+    "dompurify": "^3.1.0",
     "dotenv": "^16.4.5",
     "express-session": "^1.18.0",
     "font-awesome": "^4.7.0",
@@ -62,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/react-radio-group": "^3.0.7"
   }
 }

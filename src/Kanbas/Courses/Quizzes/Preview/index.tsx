@@ -8,6 +8,7 @@ import { BsExclamationCircle, BsQuestionCircle } from "react-icons/bs";
 import { FaPencilAlt } from "react-icons/fa";
 import { GoTriangleRight } from "react-icons/go";
 import "./index.css";
+import DOMPurify from "dompurify";
 
 function QuizPreview() {
   const { quizId } = useParams();
@@ -50,6 +51,10 @@ function QuizPreview() {
     );
   };
 
+  const createMarkup = (htmlContent: string) => {
+    return { __html: DOMPurify.sanitize(htmlContent) };
+  };
+
   useEffect(() => {
     client.findQuizById(quizId).then((quiz) => {
       dispatch(setQuiz(quiz));
@@ -72,21 +77,27 @@ function QuizPreview() {
           {getCurrentDateTime().formattedTime}
         </h6>
         <h3 style={{ paddingTop: "10px" }}>Quiz Instructions</h3>
-        <p>{quiz?.description}</p>
+        <p dangerouslySetInnerHTML={createMarkup(quiz?.description)} />
         <hr />
       </div>
       <div>
         <div className="question-block">
           {/* Display only the selected question */}
           <h6 className="question-header-block">
-            <b>Question {selectedQuestionIndex + 1}</b>
+            <b>
+              Question {selectedQuestionIndex + 1} -{" "}
+              {quiz?.questions[selectedQuestionIndex]?.type}
+            </b>
             <b className="float-end">
               {quiz?.questions[selectedQuestionIndex]?.points} pts
             </b>
           </h6>
-          <p className="question-content">
-            {quiz?.questions[selectedQuestionIndex]?.question_content}
-          </p>
+          <p
+            className="question-content"
+            dangerouslySetInnerHTML={createMarkup(
+              quiz?.questions[selectedQuestionIndex]?.question_content,
+            )}
+          />
           <hr />
           <ul
             style={{
