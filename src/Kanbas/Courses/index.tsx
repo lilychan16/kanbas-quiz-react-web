@@ -49,6 +49,46 @@ function Courses() {
     setCourse(course);
   };
 
+  // Build breadcrumbs dynamically based on pathArray
+  const buildBreadcrumbs = () => {
+    const elements = [];
+
+    // Course number and name
+    if (course && course.number && course.name) {
+      elements.push(
+        <li className="breadcrumb-item">
+          <a href="#" className="breadcrumb-text text-danger">
+            {course.number} {course.name}
+          </a>
+        </li>,
+      );
+    }
+
+    // middle path elements
+    pathArray.slice(4, pathArray.length - 1).forEach((segment) => {
+      elements.push(
+        <li className="breadcrumb-item">
+          <a href="#" className="breadcrumb-text text-danger">
+            {decodeURIComponent(segment)}
+          </a>
+        </li>,
+      );
+    });
+
+    // Current page
+    let currentSegment = pathArray[pathArray.length - 1];
+    if (pathArray[pathArray.length - 2] === "Preview") {
+      currentSegment = "Q" + currentSegment;
+    }
+    elements.push(
+      <li className="breadcrumb-item active" aria-current="page">
+        {decodeURIComponent(currentSegment).replace(/_/g, " ")}
+      </li>,
+    );
+
+    return elements;
+  };
+
   useEffect(() => {
     findCourseById(courseId);
   }, [courseId]);
@@ -63,21 +103,7 @@ function Courses() {
                 <HiMiniBars3 />
               </a>
             </li>
-            <li className="breadcrumb-item">
-              <a href="#" className="breadcrumb-text text-danger">
-                {course?.number} {course?.name}
-              </a>
-            </li>
-            {pathArray[pathArray.length - 2] === "Assignments" ? (
-              <li className="breadcrumb-item">
-                <a href="#" className="breadcrumb-text text-danger">
-                  {pathArray[pathArray.length - 2]}
-                </a>
-              </li>
-            ) : null}
-            <li className="breadcrumb-item active" aria-current="page">
-              {pathname.split("/").pop()?.replace("%20", " ")}
-            </li>
+            {buildBreadcrumbs()}
           </ol>
           <button className="btn btn-secondary button-color float-end">
             <FaEye /> Student View
