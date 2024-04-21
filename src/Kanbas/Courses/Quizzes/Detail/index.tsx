@@ -1,12 +1,19 @@
+
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addQuiz, deleteQuiz, setQuiz, updateQuiz } from "../quizzesReducer";
-import { FaEllipsisV, FaCheckCircle, FaPencilAlt } from "react-icons/fa";
+import { FaEllipsisV, FaCheckCircle, FaPencilAlt, FaBan } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { KanbasState } from "../../../store";
+import * as client from "../client";
+
 
 function QuizDetail() {
   const { quizId } = useParams();
   const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
+
+
+
   const { courseId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -16,13 +23,44 @@ function QuizDetail() {
     console.log("Navigate to quiz edit page");
   };
 
+  const quizPreviewPage = () => {
+    navigate(`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview`);
+    console.log("Navigate to quiz preview page");
+  };
+
+  const handlePublishUnpublish = (quiz: any) => {
+    const newPublished = !quiz.published;
+    const updatedQuiz = { ...quiz, published: newPublished };
+    dispatch(setQuiz(updatedQuiz));
+    client.updateQuiz(updatedQuiz).then((status) => {
+      dispatch(updateQuiz(updatedQuiz));
+    });
+  };
+
+  useEffect(() => {
+    client.findQuizById(quizId).then((quiz) => {
+      dispatch(setQuiz(quiz));
+    });
+  }, [quizId]);
+
   return (
     <div className="ms-5 col-lg-8">
       <div className="d-flex justify-content-end">
-        <button className="btn btn-success me-1 button-size">
-          <FaCheckCircle /> Publish
+        <button
+          className={`btn ${
+            quiz.published ? "btn-danger" : "btn-success"
+          } me-1 button-size`}
+          onClick={() => {
+            handlePublishUnpublish(quiz);
+          }}
+        >
+          {quiz.published ? "Unpublish" : "Publish"}
         </button>
-        <button className="btn btn-secondary me-2 button-color button-size">
+        <button
+          className="btn btn-secondary me-2 button-color button-size"
+          onClick={quizPreviewPage}
+        >
+
           Preview
         </button>
         <button
@@ -86,13 +124,6 @@ function QuizDetail() {
             </tr>
             <tr>
               <td className="text-end">
-                <b>View Responses</b>
-              </td>
-              <td>&nbsp;&nbsp;&nbsp;</td>
-              <td>Always</td>
-            </tr>
-            <tr>
-              <td className="text-end">
                 <b>Show Correct Answers</b>
               </td>
               <td>&nbsp;&nbsp;&nbsp;</td>
@@ -100,24 +131,17 @@ function QuizDetail() {
             </tr>
             <tr>
               <td className="text-end">
+                <b>Access Code</b>
+              </td>
+              <td>&nbsp;&nbsp;&nbsp;</td>
+              <td>{quiz?.access_code}</td>
+            </tr>
+            <tr>
+              <td className="text-end">
                 <b>One Question at a Time</b>
               </td>
               <td>&nbsp;&nbsp;&nbsp;</td>
               <td>{quiz?.one_question_at_a_time === true ? "Yes" : "No"}</td>
-            </tr>
-            <tr>
-              <td className="text-end">
-                <b>Require Respondus LockDown Browser</b>
-              </td>
-              <td>&nbsp;&nbsp;&nbsp;</td>
-              <td>No</td>
-            </tr>
-            <tr>
-              <td className="text-end">
-                <b>Required to View Quiz Results</b>
-              </td>
-              <td>&nbsp;&nbsp;&nbsp;</td>
-              <td>No</td>
             </tr>
             <tr>
               <td className="text-end">

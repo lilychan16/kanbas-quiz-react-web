@@ -43,7 +43,8 @@ function TrueFalse({ onSave, onUpdate, onCancel, question }: TrueFalseProps) {
 
   const handleCorrectAnswerChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    value: string
+    value: string,
+
   ) => {
     setCorrectAnswer(value);
   };

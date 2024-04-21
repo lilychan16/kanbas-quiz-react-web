@@ -25,6 +25,7 @@ import MultipleChoice from "./Quizzes/Editors/MultipleChoice";
 import QuizEditor from "./Quizzes/QuizEditor";
 import QuizDetail from "./Quizzes/Detail";
 import QuestionsList from "./Quizzes/QuestionsList";
+// import QuizPreview from "./Quizzes/Preview";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -101,6 +102,7 @@ function Courses() {
             <Route path="Grades" element={<Grades />} />
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/:quizId" element={<QuizDetail />} />
+            {/*<Route path="Quizzes/:quizId/Preview" element={<QuizPreview />} />*/}
             <Route path="Quizzes/:quizId/Edit" element={<Editor />}>
               <Route path="Questions" element={<QuestionsList />} />
               <Route path="EditDetails" element={<QuizEditor />} />

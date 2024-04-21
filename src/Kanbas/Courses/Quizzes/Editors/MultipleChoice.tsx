@@ -49,7 +49,7 @@ function MultipleChoice({
 
   const handleChoiceTextChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const newChoices = [...choices];
     newChoices[index].text = e.target.value;
@@ -136,6 +136,8 @@ function MultipleChoice({
           <input
             type="text"
             value={choice.text}
+            className="me-2"
+
             onChange={(e) => handleChoiceTextChange(index, e)}
             placeholder="Enter choice text"
           />
@@ -145,18 +147,26 @@ function MultipleChoice({
             checked={correctAnswer === choice.text}
             onChange={() => handleCorrectAnswerChange(choice.text)}
           />
-          <label onClick={() => handleCorrectAnswerChange(choice.text)}>
+          <label
+            className="me-2"
+            onClick={() => handleCorrectAnswerChange(choice.text)}
+          >
             Set as correct choice
           </label>
-          <button onClick={() => removeChoice(index)}>Remove</button>
+          <button
+            className="btn btn-danger mb-2"
+            onClick={() => removeChoice(index)}
+          >
+            Remove
+          </button>
         </div>
       ))}
 
-      <button className="btn btn-primary" onClick={addChoice}>
+      <button className="btn btn-primary mb-2" onClick={addChoice}>
         Add Choice
       </button>
       <br />
-      <br />
+
       <button className="btn btn-secondary me-2" onClick={handleCancel}>
         Cancel
       </button>
