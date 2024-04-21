@@ -8,6 +8,7 @@ import MultipleChoice from "./Editors/MultipleChoice";
 import Blanks from "./Editors/Blanks";
 import TrueFalse from "./Editors/TrueFalse";
 import "./QuestionsList.css";
+import Modal from "react-bootstrap/Modal";
 
 function QuestionsList() {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ function QuestionsList() {
   const [showEditor, setShowEditor] = useState(false);
   const [editorType, setEditorType] = useState("MULTIPLE CHOICES");
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState<any>(null);
 
   useEffect(() => {
     setQuizData(quiz);
@@ -101,6 +104,28 @@ function QuestionsList() {
     );
   };
 
+  const openDeleteModal = (question: any, index: number) => {
+    setQuestionToDelete({ ...question, index });
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const confirmDelete = () => {
+    const updatedQuestions = quizData.questions.filter(
+      (q: any) => q._id !== questionToDelete._id,
+    );
+    const totalPoints = calculateTotalPoints(updatedQuestions);
+    setQuizData({
+      ...quizData,
+      questions: updatedQuestions,
+      points: totalPoints,
+    });
+    closeModal();
+  };
+
   const renderEditor = () => {
     switch (editorType) {
       case "MULTIPLE CHOICES":
@@ -139,19 +164,33 @@ function QuestionsList() {
     <div>
       <br />
       <div>
-        {quizData.questions.map((question: any, index: any) => (
-          <div
-            key={question.id || index}
-            onClick={() => handleSelectQuestion(question, question.type)}
-            className="quiz-question-link"
-          >
-            Question {index + 1}: {question.title} - {question.type}
-          </div>
-        ))}
+        <div className="list-group">
+          {quizData.questions.map((question: any, index: any) => (
+            <div
+              key={question._id || index}
+              className="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span
+                className="quiz-question-link"
+                onClick={() => handleSelectQuestion(question, question.type)}
+                style={{ cursor: "pointer" }}
+              >
+                Question {index + 1}: {question.title} - {question.type}
+              </span>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => openDeleteModal(question, index)}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
+
       {!showEditor && (
         <button
-          className="btn btn-secondary"
+          className="btn btn-secondary mt-2"
           onClick={() => {
             setEditorType("MULTIPLE CHOICES");
             setShowEditor(true);
@@ -198,6 +237,27 @@ function QuestionsList() {
         </button>
       </div>
       <hr />
+      <Modal
+        show={modalIsOpen}
+        onHide={closeModal}
+        contentLabel="Confirm Deletion"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Question?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Delete Q{questionToDelete?.index + 1}: {questionToDelete?.title} -{" "}
+          {questionToDelete?.type} - Points: {questionToDelete?.points}?
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-danger" onClick={confirmDelete}>
+            Yes
+          </button>
+          <button className="btn btn-secondary" onClick={closeModal}>
+            No
+          </button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
