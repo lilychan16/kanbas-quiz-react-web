@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addQuiz, deleteQuiz, setQuiz, updateQuiz } from "../quizzesReducer";
@@ -7,12 +6,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { KanbasState } from "../../../store";
 import * as client from "../client";
 
-
 function QuizDetail() {
   const { quizId } = useParams();
   const quiz = useSelector((state: KanbasState) => state.quizzesReducer.quiz);
-
-
 
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -24,7 +20,7 @@ function QuizDetail() {
   };
 
   const quizPreviewPage = () => {
-    navigate(`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview`);
+    navigate(`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview/1`);
     console.log("Navigate to quiz preview page");
   };
 
@@ -60,7 +56,6 @@ function QuizDetail() {
           className="btn btn-secondary me-2 button-color button-size"
           onClick={quizPreviewPage}
         >
-
           Preview
         </button>
         <button
