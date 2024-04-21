@@ -98,7 +98,7 @@ function Courses() {
             <Route path="Grades" element={<Grades />} />
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/:quizId" element={<QuizDetail />} />
-            <Route path="Quizzes/:quizId/Preview" element={<QuizPreview />} />
+            <Route path="Quizzes/:quizId/Preview/:questionNumber" element={<QuizPreview />} />
           </Routes>
         </div>
       </div>

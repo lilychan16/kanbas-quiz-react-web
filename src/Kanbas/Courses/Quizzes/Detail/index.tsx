@@ -22,7 +22,7 @@ function QuizDetail() {
     };
 
     const quizPreviewPage = () => {
-        navigate(`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview`);
+        navigate(`/Kanbas/Courses/${courseId}/Quizzes/${quizId}/Preview/1`);
         console.log("Navigate to quiz preview page");
     };
 
