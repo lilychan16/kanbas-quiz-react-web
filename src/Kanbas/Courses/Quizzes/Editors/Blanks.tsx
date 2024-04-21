@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 interface BlanksProps {
-  onSave: any;
-  onCancel: any;
+  onSave: (newQuestion: any) => void;
+  onUpdate: (updatedQuestion: any) => void;
+  onCancel: () => void;
+  question?: any;
 }
 
-function Blanks({ onSave, onCancel }: BlanksProps) {
+function Blanks({ onSave, onUpdate, onCancel, question }: BlanksProps) {
   const [questionTitle, setQuestionTitle] = useState("");
   const [points, setPoints] = useState(1);
-  const [question, setQuestion] = useState("");
+  const [questionContent, setQuestionContent] = useState("");
   const [blanks, setBlanks] = useState([{ answer: "" }]); // Each blank has one answer
+
+  useEffect(() => {
+    if (question) {
+      setQuestionTitle(question.title);
+      setPoints(question.points);
+      setQuestionContent(question.question_content);
+      setBlanks(question.answers.map((a: any) => ({ answer: a.content })));
+    }
+  }, [question]);
 
   const handleTitleChange = (e: any) => {
     setQuestionTitle(e.target.value);
@@ -21,7 +32,7 @@ function Blanks({ onSave, onCancel }: BlanksProps) {
   };
 
   const handleQuestionChange = (e: string) => {
-    setQuestion(e);
+    setQuestionContent(e);
   };
 
   const handleAnswerChange = (index: number, e: any) => {
@@ -40,14 +51,28 @@ function Blanks({ onSave, onCancel }: BlanksProps) {
   };
 
   const handleSave = () => {
-    const newQuestion = {
-      title: questionTitle,
-      points: points,
-      description: question,
-      answers: blanks.map((blank) => blank.answer),
-    };
-    onSave(newQuestion);
-    console.log("Saved", { questionTitle, points, question, blanks });
+    if (question) {
+      const updatedQuestion = {
+        _id: question._id,
+        title: questionTitle,
+        points: points,
+        question_content: questionContent,
+        answers: blanks.map((blank) => ({ content: blank.answer })),
+        type: "FILL IN BLANKS",
+      };
+      onUpdate(updatedQuestion);
+      console.log("Updated", updatedQuestion);
+    } else {
+      const newQuestion = {
+        title: questionTitle,
+        points: points,
+        question_content: questionContent,
+        answers: blanks.map((blank) => ({ content: blank.answer })),
+        type: "FILL IN BLANKS",
+      };
+      onSave(newQuestion);
+      console.log("Saved", newQuestion);
+    }
   };
 
   const handleCancel = () => {
@@ -89,7 +114,7 @@ function Blanks({ onSave, onCancel }: BlanksProps) {
         <h5>Question:</h5>
         <Editor
           apiKey="e1ioznczok5yus73u6oqwh6dbb6gszw6rln4i87qmz9y4hc2"
-          value={question}
+          value={questionContent}
           onEditorChange={handleQuestionChange}
         />
         <br />
