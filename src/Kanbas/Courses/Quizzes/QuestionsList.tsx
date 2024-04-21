@@ -9,6 +9,7 @@ import Blanks from "./Editors/Blanks";
 import TrueFalse from "./Editors/TrueFalse";
 import "./QuestionsList.css";
 import Modal from "react-bootstrap/Modal";
+import { Chip } from "@mui/material";
 
 function QuestionsList() {
   const navigate = useNavigate();
@@ -99,7 +100,8 @@ function QuestionsList() {
 
   const calculateTotalPoints = (questions: any) => {
     return questions.reduce(
-      (accumulator: number, question: any) => accumulator + question.points,
+      (accumulator: number, question: any) =>
+        accumulator + Number(question.points),
       0,
     );
   };
@@ -162,7 +164,12 @@ function QuestionsList() {
 
   return (
     <div>
-      <br />
+      <Chip
+        label={`Tentative total points: ${calculateTotalPoints(quizData.questions)}`}
+        variant="outlined"
+        color="error"
+        className="mt-2 mb-2"
+      />
       <div>
         <div className="list-group">
           {quizData.questions.map((question: any, index: any) => (
@@ -175,7 +182,8 @@ function QuestionsList() {
                 onClick={() => handleSelectQuestion(question, question.type)}
                 style={{ cursor: "pointer" }}
               >
-                Question {index + 1}: {question.title} - {question.type}
+                Question {index + 1}: {question.title} - {question.type} -{" "}
+                {question.points} points
               </span>
               <button
                 className="btn btn-danger btn-sm"
