@@ -93,3 +93,4 @@ const quizzesSlice = createSlice({
 export const { addQuiz, deleteQuiz, updateQuiz, setQuiz, setQuizzes } =
   quizzesSlice.actions;
 export default quizzesSlice.reducer;
+

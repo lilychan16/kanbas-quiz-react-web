@@ -137,6 +137,7 @@ function MultipleChoice({
             type="text"
             value={choice.text}
             className="me-2"
+
             onChange={(e) => handleChoiceTextChange(index, e)}
             placeholder="Enter choice text"
           />
@@ -165,6 +166,7 @@ function MultipleChoice({
         Add Choice
       </button>
       <br />
+
       <button className="btn btn-secondary me-2" onClick={handleCancel}>
         Cancel
       </button>

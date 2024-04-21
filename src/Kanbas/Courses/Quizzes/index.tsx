@@ -7,6 +7,7 @@ import {
   FaPlus,
   FaClipboard,
   FaBan,
+
 } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import db from "../../Database";
@@ -88,7 +89,6 @@ function Quizzes() {
       );
     }
   };
-
   // Use a state to store the correct quiz id to be deleted.
   // Otherwise, the deletion dialog Modal will use the wrong quiz id
   // (which is always the last quiz id in the quiz list executed).
@@ -105,6 +105,7 @@ function Quizzes() {
       [quizId]: !prevVisibleDropdowns[quizId],
     }));
   };
+
 
   const handleDialogClose = () => setDialogShow(false);
 
@@ -123,6 +124,7 @@ function Quizzes() {
     });
   };
 
+
   const handleListPagePublish = (quiz: any) => {
     const newPublished = !quiz.published;
     const updatedQuiz = {
@@ -134,6 +136,7 @@ function Quizzes() {
       dispatch(updateQuiz(updatedQuiz));
     });
   };
+
 
   useEffect(() => {
     client.findQuizzesForCourse(courseId).then((quizzes) => {
@@ -177,6 +180,7 @@ function Quizzes() {
                     <FaClipboard className="me-4" style={{ color: "green" }} />
                     <Link
                       to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz._id}`}
+
                       className="quiz-setup"
                       onClick={() => dispatch(setQuiz(quiz))}
                     >
@@ -195,6 +199,7 @@ function Quizzes() {
                             </tr>
                           </tbody>
                         </table>
+
                       </p>
                     </Link>
                   </div>
@@ -252,6 +257,7 @@ function Quizzes() {
                         </ul>
                       )}
                     </div>
+
                   </div>
                   <Modal show={dialogShow} onHide={handleDialogClose}>
                     <Modal.Header closeButton>

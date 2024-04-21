@@ -33,6 +33,7 @@ function QuizDetail() {
       dispatch(updateQuizRedux({ ...quizData }));
       // navigate back to quiz detail
       navigate(`/Kanbas/Courses/${quiz.course}/Quizzes/${quiz._id}`);
+
     } catch (error) {
       console.error("Error updating quiz:", error);
     }

@@ -23,4 +23,5 @@ export const deleteQuiz = async (quizId: any) => {
 export const updateQuiz = async (quiz: any) => {
   const response = await axios.put(`${QUIZZES_API}/${quiz._id}`, quiz);
   return response.data;
+
 };

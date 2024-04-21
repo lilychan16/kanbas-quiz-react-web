@@ -11,6 +11,7 @@ import "./QuestionsList.css";
 import Modal from "react-bootstrap/Modal";
 import { Chip } from "@mui/material";
 
+
 function QuestionsList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function QuestionsList() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState<any>(null);
+
 
   useEffect(() => {
     setQuizData(quiz);
@@ -266,6 +268,7 @@ function QuestionsList() {
           </button>
         </Modal.Footer>
       </Modal>
+
     </div>
   );
 }
