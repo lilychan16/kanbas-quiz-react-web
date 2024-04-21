@@ -80,7 +80,7 @@ function TrueFalse({ onSave, onUpdate, onCancel, question }: TrueFalseProps) {
 
   return (
     <div>
-      <h1>TrueFalse</h1>
+      <h3>True or False Question Editor</h3>
       {/*Top bar with question title, question type, and points*/}
       <div>
         <input

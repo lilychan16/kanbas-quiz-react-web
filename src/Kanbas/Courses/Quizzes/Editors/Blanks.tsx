@@ -81,7 +81,7 @@ function Blanks({ onSave, onUpdate, onCancel, question }: BlanksProps) {
 
   return (
     <div>
-      <h1>Blanks</h1>
+      <h3>Fill in the Blanks Question Editor</h3>
       <div>
         <input
           className="me-2"
@@ -137,10 +137,9 @@ function Blanks({ onSave, onUpdate, onCancel, question }: BlanksProps) {
             </button>
           </div>
         ))}
-        <button className="btn btn-primary" onClick={addBlank}>
+        <button className="btn btn-primary mb-2" onClick={addBlank}>
           Add Blank
         </button>
-        <br />
         <br />
         <button className="btn btn-secondary me-2" onClick={handleCancel}>
           Cancel

@@ -102,7 +102,7 @@ function MultipleChoice({
 
   return (
     <div>
-      <h1>Multiple Choice Question Editor</h1>
+      <h3>Multiple Choice Question Editor</h3>
       <input
         type="text"
         placeholder="Question Title"
@@ -166,7 +166,6 @@ function MultipleChoice({
         Add Choice
       </button>
       <br />
-
       <button className="btn btn-secondary me-2" onClick={handleCancel}>
         Cancel
       </button>
