@@ -17,8 +17,14 @@ import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import Grades from "./Grades";
+import Quizzes from "./Quizzes";
 import axios from "axios";
 import * as client from "../client";
+import QuizDetail from "./Quizzes/Detail";
+import QuizPreview from "./Quizzes/Preview";
+import QuizEditor from "./Quizzes/QuizEditor";
+import Editor from "./Quizzes/Editor";
+import QuestionsList from "./Quizzes/QuestionsList";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -26,7 +32,7 @@ function Courses() {
   const { courseId } = useParams();
   const { pathname } = useLocation();
   const pathArray = pathname.split("/");
-  
+
   const COURSES_API = `${API_BASE}/api/courses`;
 
   const [course, setCourse] = useState<any>({ _id: "" });
@@ -38,10 +44,50 @@ function Courses() {
     setCourse(response.data);
   };
   */
- const findCourseById = async (courseId: any) => {
+  const findCourseById = async (courseId: any) => {
     const course = await client.findCourseById(courseId);
     setCourse(course);
- };
+  };
+
+  // Build breadcrumbs dynamically based on pathArray
+  const buildBreadcrumbs = () => {
+    const elements = [];
+
+    // Course number and name
+    if (course && course.number && course.name) {
+      elements.push(
+        <li className="breadcrumb-item">
+          <a href="#" className="breadcrumb-text text-danger">
+            {course.number} {course.name}
+          </a>
+        </li>,
+      );
+    }
+
+    // middle path elements
+    pathArray.slice(4, pathArray.length - 1).forEach((segment) => {
+      elements.push(
+        <li className="breadcrumb-item">
+          <a href="#" className="breadcrumb-text text-danger">
+            {decodeURIComponent(segment)}
+          </a>
+        </li>,
+      );
+    });
+
+    // Current page
+    let currentSegment = pathArray[pathArray.length - 1];
+    if (pathArray[pathArray.length - 2] === "Preview") {
+      currentSegment = "Q" + currentSegment;
+    }
+    elements.push(
+      <li className="breadcrumb-item active" aria-current="page">
+        {decodeURIComponent(currentSegment).replace(/_/g, " ")}
+      </li>,
+    );
+
+    return elements;
+  };
 
   useEffect(() => {
     findCourseById(courseId);
@@ -57,21 +103,7 @@ function Courses() {
                 <HiMiniBars3 />
               </a>
             </li>
-            <li className="breadcrumb-item">
-              <a href="#" className="breadcrumb-text text-danger">
-                {course?.number} {course?.name}
-              </a>
-            </li>
-            {pathArray[pathArray.length - 2] === "Assignments" ? (
-              <li className="breadcrumb-item">
-                <a href="#" className="breadcrumb-text text-danger">
-                  {pathArray[pathArray.length - 2]}
-                </a>
-              </li>
-            ) : null}
-            <li className="breadcrumb-item active" aria-current="page">
-              {pathname.split("/").pop()?.replace("%20", " ")}
-            </li>
+            {buildBreadcrumbs()}
           </ol>
           <button className="btn btn-secondary button-color float-end">
             <FaEye /> Student View
@@ -93,6 +125,16 @@ function Courses() {
               element={<AssignmentEditor />}
             />
             <Route path="Grades" element={<Grades />} />
+            <Route path="Quizzes" element={<Quizzes />} />
+            <Route path="Quizzes/:quizId" element={<QuizDetail />} />
+            <Route path="Quizzes/:quizId/Edit" element={<Editor />}>
+              <Route path="Questions" element={<QuestionsList />} />
+              <Route path="EditDetails" element={<QuizEditor />} />
+            </Route>
+            <Route
+              path="Quizzes/:quizId/Preview/:questionNumber"
+              element={<QuizPreview />}
+            />
           </Routes>
         </div>
       </div>

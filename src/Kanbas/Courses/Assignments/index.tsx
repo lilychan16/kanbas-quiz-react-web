@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import "./index.css";
-import { FaCheckCircle, FaEllipsisV, FaPlusCircle, FaPlus, FaClipboard } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaEllipsisV,
+  FaPlusCircle,
+  FaPlus,
+  FaClipboard,
+} from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import db from "../../Database";
 import {
@@ -9,7 +15,7 @@ import {
   deleteAssignment,
   updateAssignment,
   setAssignment,
-  setAssignments
+  setAssignments,
 } from "./assignmentsReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { KanbasState } from "../../store";
@@ -23,14 +29,22 @@ function Assignments() {
   //(assignment) => assignment.course === courseId);
 
   const assignmentList = useSelector(
-    (state: KanbasState) => state.assignmentsReducer.assignments
+    (state: KanbasState) => state.assignmentsReducer.assignments,
   ).filter((assignment) => assignment.course === courseId);
 
   const assignment = useSelector(
-    (state: KanbasState) => state.assignmentsReducer.assignment
+    (state: KanbasState) => state.assignmentsReducer.assignment,
   );
 
   const newAssignmentPage = () => {
+    dispatch(
+      setAssignment({
+        title: "New Assignment",
+        start: "2024-01-01",
+        due: "2024-01-31",
+        points: "100",
+      }),
+    );
     navigate(`/Kanbas/Courses/${courseId}/Assignments/New`);
     console.log("Navigate to new assignment page");
   };
@@ -52,16 +66,16 @@ function Assignments() {
 
   const handleDeleteConfirmation = () => {
     client.deleteAssignment(assignmentIdToDelete).then((status) => {
-        dispatch(deleteAssignment(assignmentIdToDelete));
-        console.log(assignmentIdToDelete);
-        handleDialogClose();
+      dispatch(deleteAssignment(assignmentIdToDelete));
+      console.log(assignmentIdToDelete);
+      handleDialogClose();
     });
   };
 
   useEffect(() => {
-    client.findAssignmentsForCourse(courseId).then((assignments) =>
-      dispatch(setAssignments(assignments))
-    );
+    client
+      .findAssignmentsForCourse(courseId)
+      .then((assignments) => dispatch(setAssignments(assignments)));
   }, [courseId]);
 
   return (
