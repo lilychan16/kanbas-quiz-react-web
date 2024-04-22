@@ -39,9 +39,17 @@ function QuizDetail() {
   };
 
   useEffect(() => {
-    client.findQuizById(quizId).then((quiz) => {
-      dispatch(setQuiz(quiz));
-    });
+    client
+      .findQuizById(quizId)
+      .then((quiz) => {
+        dispatch(setQuiz(quiz));
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("This quiz has been deleted or does not exist.");
+          navigate(`/Kanbas/Courses/${courseId}/Quizzes`);
+        }
+      });
   }, [quizId]);
 
   return (

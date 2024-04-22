@@ -11,7 +11,6 @@ import "./QuestionsList.css";
 import Modal from "react-bootstrap/Modal";
 import { Chip } from "@mui/material";
 
-
 function QuestionsList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,7 +22,6 @@ function QuestionsList() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState<any>(null);
-
 
   useEffect(() => {
     setQuizData(quiz);
@@ -49,7 +47,7 @@ function QuestionsList() {
   };
 
   const handleUpdateQuestion = (updatedQuestion: any) => {
-    const updatedQuestions = quizData.questions.map((q: any) => {
+    const updatedQuestions = quizData?.questions?.map((q: any) => {
       if (q._id === updatedQuestion._id) {
         return updatedQuestion;
       }
@@ -101,7 +99,7 @@ function QuestionsList() {
   };
 
   const calculateTotalPoints = (questions: any) => {
-    return questions.reduce(
+    return questions?.reduce(
       (accumulator: number, question: any) =>
         accumulator + Number(question.points),
       0,
@@ -174,7 +172,7 @@ function QuestionsList() {
       />
       <div>
         <div className="list-group">
-          {quizData.questions.map((question: any, index: any) => (
+          {quizData?.questions?.map((question: any, index: any) => (
             <div
               key={question._id || index}
               className="list-group-item d-flex justify-content-between align-items-center"
@@ -268,7 +266,6 @@ function QuestionsList() {
           </button>
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 }

@@ -1,6 +1,12 @@
-
 import React, { useEffect } from "react";
-import { NavLink, Routes, Route, Navigate, useParams } from "react-router-dom";
+import {
+  NavLink,
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 import MultipleChoice from "./Editors/MultipleChoice";
 import QuizEditor from "./QuizEditor";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,16 +21,26 @@ import { setQuiz } from "./quizzesReducer";
 
 function Editor() {
   const { quizId } = useParams();
+  const { courseId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const quizData = useSelector(
     (state: KanbasState) => state.quizzesReducer.quiz,
   );
 
   useEffect(() => {
-    client.findQuizById(quizId).then((quizData) => {
-      dispatch(setQuiz(quizData));
-    });
+    client
+      .findQuizById(quizId)
+      .then((quizData) => {
+        dispatch(setQuiz(quizData));
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("This quiz has been deleted or does not exist.");
+          navigate(`/Kanbas/Courses/${courseId}/Quizzes`);
+        }
+      });
   }, [quizId]);
 
   console.log(quizData);
