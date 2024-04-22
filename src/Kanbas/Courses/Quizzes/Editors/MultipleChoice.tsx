@@ -143,7 +143,7 @@ function MultipleChoice({
       </h6>
       <h5>Question:</h5>
       <Editor
-        apiKey="0i3zt6aumj20bavirmshczszr45gz2oza5d9ru6x2y9ucv00"
+        apiKey="e1ioznczok5yus73u6oqwh6dbb6gszw6rln4i87qmz9y4hc2"
         value={questionContent}
         onEditorChange={handleQuestionChange}
       />
