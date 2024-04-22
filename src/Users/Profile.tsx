@@ -18,12 +18,15 @@ export default function Profile() {
 
   const fetchProfile = async () => {
     const account = await client.profile();
-    console.log(account);
-    setProfile(account);
+    const aId = account._id;
+    const user = await client.findUserById(aId);
+    console.log(user);
+    setProfile(user);
   };
 
   const save = async () => {
     await client.updateUser(profile);
+    await fetchProfile();
   };
 
   const signout = async () => {
